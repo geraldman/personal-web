@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #050508;
+  --color-bg-secondary: #0a0a10;
+  --color-surface: #0d0d14;
+  --color-surface-hover: #12121c;
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border-hover: rgba(255, 255, 255, 0.34);
+  --color-accent: #f2f2ee;
+  --color-accent-secondary: #ffffff;
+  --color-accent-dark: #9c9c95;
+  --color-accent-dim: rgba(255, 255, 255, 0.12);
+  --color-accent-glow: rgba(255, 255, 255, 0.28);
+  --color-text-primary: #f5f5f2;
+  --color-text-secondary: #b2b2ac;
+  --color-text-muted: #6f6f6a;
+  --color-success: #00e5a0;
+  --color-warning: #f0b429;
+  --color-danger: #ff4d6a;
+  --max-width: 1200px;
+  --nav-height: 65px;
+  --font-body: var(--font-geist-sans);
+  --font-code: var(--font-geist-mono);
+}
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-code);
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+    /* -ms-overflow-style: none;
+    scrollbar-width: none; */
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-body), sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--color-accent-dim);
+    color: var(--color-text-primary);
+  }
+
+  /* html::-webkit-scrollbar,
+  body::-webkit-scrollbar{
+    display: none;
+  } */
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(13, 13, 20, 0.75);
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(14px);
+  }
+
+  .glow {
+    box-shadow: 0 0 28px var(--color-accent-glow);
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      112deg,
+      var(--color-accent) 0%,
+      var(--color-accent-secondary) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .section-padding {
+    padding: 6rem 1.5rem;
+  }
+
+  .container-width {
+    margin-inline: auto;
+    width: min(100%, var(--max-width));
+  }
+}
