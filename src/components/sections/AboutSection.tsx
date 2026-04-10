@@ -1,14 +1,11 @@
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { getStatTicker } from "@/lib/constants";
 import Image from "next/image";
 
-const quickFacts = [
-  "Focused on secure-by-default architecture",
-  "Interested in adversarial testing and threat modeling",
-  "Building practical tools for modern engineering teams",
-];
+export async function AboutSection() {
+  const statTicker = await getStatTicker();
 
-export function AboutSection() {
   return (
     <AnimatedSection id="about" className="bg-[var(--color-bg-secondary)]">
       <div className="container-width grid gap-10 lg:grid-cols-5">
@@ -23,17 +20,14 @@ export function AboutSection() {
           <p className="max-w-2xl text-sm text-[var(--color-text-secondary)] lg:text-base mb-5">
             I combine product-minded development with offensive and defensive security thinking to design systems that are fast, maintainable, and hard to exploit.
           </p>
-          <div className="glass rounded-2xl p-6">
-            <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
-              {"// quick facts"}
-            </p>
-            <ul className="space-y-3">
-              {quickFacts.map((fact) => (
-                <li key={fact} className="text-sm text-[var(--color-text-secondary)]">
-                  {fact}
-                </li>
-              ))}
-            </ul>
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            {statTicker.map((fact) => (
+            <div key={fact} className="glass rounded-2xl p-6">
+              <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
+                
+              </p>
+            </div>
+            ))}
           </div>
         </div>
 

@@ -4,22 +4,28 @@ import { useEffect, useState } from "react";
 
 const SCROLL_THRESHOLD = 70;
 
-export function useScrollNavbar() {
+export function useScrollNavbar(enabled = true) {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-        let isScrolled = false;
-        const handleScroll = () => {
-            const currentScroll = window.scrollY > SCROLL_THRESHOLD;
-            if (currentScroll !== isScrolled) {
-                isScrolled = currentScroll;
-                setIsScrolled(currentScroll);
-            }
-        };
-        // Use passive: true to ensure the browser doesn't wait for JS
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    if (!enabled) {
+      setIsScrolled(false);
+      return;
+    }
+
+    let prevScrolled = false;
+    const handleScroll = () => {
+      const currentScroll = window.scrollY > SCROLL_THRESHOLD;
+      if (currentScroll !== prevScrolled) {
+        prevScrolled = currentScroll;
+        setIsScrolled(currentScroll);
+      }
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [enabled]);
 
   return { isScrolled };
 }

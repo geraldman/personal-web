@@ -14,6 +14,7 @@ const EDITED_STATUS_WIDTHS = STATUS_WIDTHS.map(n => `${parseFloat(n) * 1.5}ch`);
 
 export function HeroSection() {
   const [statusIndex, setStatusIndex] = useState(0);
+  const [isHeroReady, setIsHeroReady] = useState(false);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -22,6 +23,24 @@ export function HeroSection() {
 
     return () => {
       window.clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    const phase = document.documentElement.dataset.appBootPhase;
+
+    if (phase === "capsule" || phase === "normal") {
+      setIsHeroReady(true);
+      return;
+    }
+
+    const handleBootCapsule = () => {
+      setIsHeroReady(true);
+    };
+
+    window.addEventListener("app:boot-capsule", handleBootCapsule);
+    return () => {
+      window.removeEventListener("app:boot-capsule", handleBootCapsule);
     };
   }, []);
 
@@ -39,8 +58,8 @@ export function HeroSection() {
       <div className="relative z-20 flex min-h-[100vh] items-center">
         <div className="container-width flex w-full flex-col items-center justify-center px-4 py-12 text-center sm:px-6">
           <motion.p
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={false}
+            animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
             transition={{ duration: 0.65, ease: heroEasing }}
             className="mb-4 inline-flex w-fit items-center rounded-full border border-[var(--color-border)] bg-[var(--color-accent-dim)] px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-[var(--color-accent)] sm:px-4 sm:text-xs sm:tracking-[0.16em]"
           >
@@ -67,8 +86,8 @@ export function HeroSection() {
           </motion.p>
 
           <motion.h1
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={false}
+            animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
             transition={{ duration: 0.65, delay: 0.12, ease: heroEasing }}
             className="text-gradient text-5xl font-semibold leading-[1.05] sm:text-6xl lg:text-7xl xl:text-8xl"
           >
@@ -76,8 +95,8 @@ export function HeroSection() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={false}
+            animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
             transition={{ duration: 0.65, delay: 0.24, ease: heroEasing }}
             className="mt-5 max-w-2xl text-base text-[var(--color-text-secondary)] lg:text-xl"
           >
@@ -85,8 +104,8 @@ export function HeroSection() {
           </motion.p>
 
           <motion.p
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={false}
+            animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
             transition={{ duration: 0.65, delay: 0.36, ease: heroEasing }}
             className="mt-3 max-w-2xl text-sm text-[var(--color-text-secondary)] lg:text-base"
           >
@@ -94,8 +113,8 @@ export function HeroSection() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={false}
+            animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
             transition={{ duration: 0.65, delay: 0.48, ease: heroEasing }}
             className="mt-8 flex flex-wrap justify-center gap-3"
           >
