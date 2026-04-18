@@ -9,6 +9,9 @@ export interface ProjectData {
   category: ProjectCategory;
   status: ProjectStatus;
   stack: string[];
+  previewImage?: string;
+  previewGif?: string;
+  previewVideo?: string;
   featured?: boolean;
   githubUrl?: string;
   liveUrl?: string;
@@ -23,4 +26,13 @@ export interface NavLink {
 export interface SocialLink {
   label: string;
   href: string;
+}
+
+export type StatTickerIcon = "projects" | "years" | "commits" | "certificates";
+
+export interface StatTickerItem {
+  id: string;
+  value: string;
+  description: string;
+  icon: StatTickerIcon;
 }

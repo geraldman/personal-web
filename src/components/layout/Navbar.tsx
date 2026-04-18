@@ -212,6 +212,7 @@ export function Navbar() {
             initial={false}
             animate={{ opacity: isNormalPhase ? 1 : 0 }}
             transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="flex items-center"
           >
             <Link href="/" className="inline-flex items-center" aria-label="Go to home">
             <Image src="/logo.png" alt="Gerald" width={40} height={40} priority

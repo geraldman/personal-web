@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     apple: "/logo.png",
   },
   openGraph: {
-    title: "Gerald | Developer and Security Researcher",
+    title: "Gerald | Full-Stack Developer and Security Engineer",
     description:
       "Modern engineering and security portfolio with focused projects and practical research.",
     url: SITE_URL,

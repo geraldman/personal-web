@@ -1,10 +1,10 @@
-import { NavLink, SocialLink } from "@/types";
+import { NavLink, SocialLink, StatTickerItem } from "@/types";
 import { fetchGithubCommit } from "./github-commit-fetch";
 
 export const OWNER_NAME = "Gerald";
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://gerald.dev";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://gerald-manurung.vercel.app";
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
@@ -40,14 +40,32 @@ const STATIC_STATS = {
 const activateGithubStat = false; // replace true in prod
 
 export async function getStatTicker() {
-  
-  
   const commitCount = activateGithubStat ? await fetchGithubCommit() : 100;
 
   return [
-    `${STATIC_STATS.projects} shipped projects`,
-    `${STATIC_STATS.years}+ years building production systems`,
-    `${commitCount.toLocaleString()} total GitHub commits`,
-    `${STATIC_STATS.certificates}+ security certificates`,
-  ];
+    {
+      id: "projects",
+      value: STATIC_STATS.projects,
+      description: "Shipped projects",
+      icon: "projects",
+    },
+    {
+      id: "years",
+      value: `${STATIC_STATS.years}+`,
+      description: "Years building production systems",
+      icon: "years",
+    },
+    {
+      id: "commits",
+      value: commitCount.toLocaleString(),
+      description: "Total GitHub commits",
+      icon: "commits",
+    },
+    {
+      id: "certificates",
+      value: `${STATIC_STATS.certificates}+`,
+      description: "Security certificates",
+      icon: "certificates",
+    },
+  ] satisfies StatTickerItem[];
 }
