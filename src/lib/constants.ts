@@ -32,8 +32,8 @@ export const NAVBAR_BOOT_DEBUG =
 export const NAVBAR_BOOT_DEBUG_MS = 5000;
 
 const STATIC_STATS = {
-  projects: "10+",
-  years: 2,
+  projects: "5+",
+  years: 1,
   certificates: 1,
 } as const;
 

@@ -12,6 +12,7 @@ import {
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useScrollNavbar } from "@/hooks/useScrollNavbar";
+import styles from "./NavbarLoader.module.css";
 
 function isActivePath(pathname: string, href: string) {
   if (href === "/") {
@@ -32,6 +33,7 @@ export function Navbar() {
   const isLoadingPhase = bootPhase === "loading";
   const isCapsulePhase = bootPhase === "capsule";
   const isNormalPhase = bootPhase === "normal";
+  const isIntroPhase = !isNormalPhase;
   const { isScrolled } = useScrollNavbar(isNormalPhase);
   const capsuleWidth = isScrolled ? "min(700px, calc(100% - 32px))" : "100%";
   const capsuleRadius = capsuleWidth === "100%" ? "0px" : "999px";
@@ -39,18 +41,23 @@ export function Navbar() {
   useEffect(() => {
     let isMounted = true;
 
-    const waitForAssets = () =>
+    const waitForDomReady = () =>
       new Promise<void>((resolve) => {
-        if (document.readyState === "complete") {
+        if (document.readyState !== "loading") {
           resolve();
           return;
         }
 
-        const onLoad = () => {
+        const onReady = () => {
           resolve();
         };
 
-        window.addEventListener("load", onLoad, { once: true });
+        document.addEventListener("DOMContentLoaded", onReady, { once: true });
+      });
+
+    const waitForBootTimeout = () =>
+      new Promise<void>((resolve) => {
+        window.setTimeout(resolve, 1200);
       });
 
     const waitForDebugDelay = () =>
@@ -63,7 +70,10 @@ export function Navbar() {
         window.setTimeout(resolve, NAVBAR_BOOT_DEBUG_MS);
       });
 
-    Promise.all([waitForAssets(), waitForDebugDelay()]).then(() => {
+    Promise.all([
+      Promise.race([waitForDomReady(), waitForBootTimeout()]),
+      waitForDebugDelay(),
+    ]).then(() => {
       if (isMounted) {
         setHasBootWaitCompleted(true);
         setBootPhase("capsule");
@@ -183,7 +193,13 @@ export function Navbar() {
         className={cn(
           "relative mx-auto flex items-center justify-between overflow-hidden border",
           isLoadingPhase && "z-[70]",
-          "border-[var(--color-border)] bg-[var(--color-surface)]/80 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-2xl backdrop-saturate-150",
+          "border-[var(--color-border)] bg-[var(--color-surface)]/80",
+          "transition-[box-shadow,backdrop-filter] duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]",
+          isLoadingPhase
+            ? "shadow-[0_4px_14px_0_rgba(0,0,0,0.2)]"
+            : isIntroPhase
+            ? "shadow-[0_4px_14px_0_rgba(0,0,0,0.2)] backdrop-blur-md"
+            : "shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-2xl backdrop-saturate-150",
         )}
       >
         <AnimatePresence>
@@ -196,6 +212,14 @@ export function Navbar() {
               className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
             >
               <Image src="/logo.png" alt="Gerald" width={40} height={40} priority />
+              {isLoadingPhase ? (
+                <span
+                  className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 translate-y-11"
+                  aria-hidden="true"
+                >
+                  <span className={styles.loader} />
+                </span>
+              ) : null}
             </motion.div>
           ) : null}
         </AnimatePresence>

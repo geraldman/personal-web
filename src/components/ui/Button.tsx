@@ -10,6 +10,7 @@ interface ButtonProps {
   variant?: ButtonVariant;
   size?: ButtonSize;
   className?: string;
+  download?: boolean | string;
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -33,16 +34,27 @@ export function Button({
   variant = "primary",
   size = "md",
   className,
+  download,
 }: ButtonProps) {
+  const classes = cn(
+    "inline-flex min-h-[44px] items-center justify-center rounded-full font-semibold tracking-wide transition-all duration-200",
+    variantStyles[variant],
+    sizeStyles[size],
+    className,
+  );
+
+  if (download) {
+    return (
+      <a href={href} download={download} className={classes}>
+        {children}
+      </a>
+    );
+  }
+
   return (
     <Link
       href={href}
-      className={cn(
-        "inline-flex min-h-[44px] items-center justify-center rounded-full font-semibold tracking-wide transition-all duration-200",
-        variantStyles[variant],
-        sizeStyles[size],
-        className,
-      )}
+      className={classes}
     >
       {children}
     </Link>

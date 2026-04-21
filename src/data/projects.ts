@@ -2,8 +2,8 @@ import { ProjectData } from "@/types";
 
 export const projects: ProjectData[] = [
   {
-    id: "secure-api-gateway",
-    title: "Secure API Gateway",
+    id: "WHISPXR",
+    title: "WHISPXR",
     description:
       "Hardened gateway with JWT validation, anomaly detection, and request provenance controls.",
     category: "security",

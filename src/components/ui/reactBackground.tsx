@@ -20,6 +20,8 @@ export interface TopographyBackgroundProps {
   sampleStep?: number
   /** Max device pixel ratio used by canvas. Lower = less fill cost on HiDPI screens. */
   maxDpr?: number
+  /** Pause frame loop while keeping a static background frame rendered. */
+  paused?: boolean
 }
 
 export function TopographyBackground({
@@ -32,6 +34,7 @@ export function TopographyBackground({
   strokeWidth = 1,
   sampleStep = 4,
   maxDpr = 1.5,
+  paused = false,
 }: TopographyBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const containerRef = useRef<HTMLDivElement>(null)
@@ -85,9 +88,10 @@ export function TopographyBackground({
       )
     }
 
-    // Animation
-    const animate = () => {
-      tick += 0.008 * speed
+    const drawFrame = () => {
+      if (!paused) {
+        tick += 0.008 * speed
+      }
 
       ctx.fillStyle = backgroundColor
       ctx.fillRect(0, 0, width, height)
@@ -120,17 +124,28 @@ export function TopographyBackground({
 
         ctx.stroke()
       }
+    }
+
+    // Animation
+    const animate = () => {
+      drawFrame()
 
       animationId = requestAnimationFrame(animate)
     }
 
-    animationId = requestAnimationFrame(animate)
+    if (paused) {
+      drawFrame()
+    } else {
+      animationId = requestAnimationFrame(animate)
+    }
 
     return () => {
-      cancelAnimationFrame(animationId)
+      if (animationId) {
+        cancelAnimationFrame(animationId)
+      }
       ro.disconnect()
     }
-  }, [lineCount, lineColor, backgroundColor, speed, strokeWidth, sampleStep, maxDpr])
+  }, [lineCount, lineColor, backgroundColor, speed, strokeWidth, sampleStep, maxDpr, paused])
 
   return (
     <div

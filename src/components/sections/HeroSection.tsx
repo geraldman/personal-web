@@ -53,6 +53,7 @@ export function HeroSection() {
         maxDpr={1.5}
         strokeWidth={1.5}
         lineColor="rgba(120, 120, 120, 0.5)"
+        paused={!isHeroReady}
       />
 
       <div className="relative z-20 flex min-h-[100vh] items-center">
@@ -122,7 +123,7 @@ export function HeroSection() {
               Get in Touch
               
             </Button>
-            <Button href="/cv/gerald-cv.pdf" variant="outlined">
+            <Button href="/cv/CV_Rev.3_Gerald-Manurung.pdf" variant="outlined" download>
               Download CV
             </Button>
           </motion.div>
