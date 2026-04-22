@@ -54,7 +54,7 @@ export function ProjectCard({ project, eagerImage = false, onOpenDetails }: Proj
       <button
         type="button"
         onClick={handleOpenDetails}
-        className="w-full text-left"
+        className="w-full rounded-xl text-left outline-none focus:outline-none focus-visible:outline-none"
         aria-label={`View details for ${project.title}`}
       >
         <div className="mb-4 overflow-hidden rounded-xl border border-[var(--color-border)]">

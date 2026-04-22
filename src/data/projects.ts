@@ -14,6 +14,7 @@ Key focus: robust session handling, message confidentiality, and production-grad
     previewVideo: "/assets/videos/secure-api-gateway-preview.mp4",
     featured: true,
     githubUrl: "https://github.com/yourusername/secure-api-gateway",
+    liveUrl: "https://whispxr.vercel.app",
   },
   {
     id: "threat-hunt-dashboard",
