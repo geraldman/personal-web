@@ -211,7 +211,7 @@ export function Navbar() {
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
               className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
             >
-              <Image src="/logo.png" alt="Gerald" width={40} height={40} priority />
+              <Image src="/assets/logo.png" alt="Gerald" width={40} height={40} priority />
               {isLoadingPhase ? (
                 <span
                   className="absolute left-1/2 top-1/2 z-30 -translate-x-1/2 translate-y-11"
@@ -239,7 +239,7 @@ export function Navbar() {
             className="flex items-center"
           >
             <Link href="/" className="inline-flex items-center" aria-label="Go to home">
-            <Image src="/logo.png" alt="Gerald" width={40} height={40} priority
+            <Image src="/assets/logo.png" alt="Gerald" width={40} height={40} priority
             className="ml-2" />
             </Link>
           </motion.div>

@@ -1,11 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
 import { ProjectCard } from "@/components/ui/ProjectCard";
+import { ProjectDetailsOverlay } from "@/components/ui/ProjectDetailsOverlay";
+import { ProjectCardSkeleton } from "@/components/ui/ProjectCardSkeleton";
 import { projects } from "@/data/projects";
 import { CATEGORY_LABELS } from "@/lib/constants";
-import { ProjectCategory } from "@/types";
+import { ProjectCategory, ProjectData } from "@/types";
 
 type FilterValue = "all" | ProjectCategory;
 
@@ -15,7 +17,17 @@ const categories = [
 ] as FilterValue[];
 
 export function ProjectsGrid() {
+  const gridRef = useRef<HTMLDivElement | null>(null);
+  const isInView = useInView(gridRef, { once: true, amount: 0.15 });
+  const [shouldRenderCards, setShouldRenderCards] = useState(false);
   const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
+  const [activeProject, setActiveProject] = useState<ProjectData | null>(null);
+
+  useEffect(() => {
+    if (isInView) {
+      setShouldRenderCards(true);
+    }
+  }, [isInView]);
 
   const filteredProjects = useMemo(() => {
     if (activeFilter === "all") {
@@ -62,6 +74,7 @@ export function ProjectsGrid() {
 
         <AnimatePresence mode="wait">
           <motion.div
+            ref={gridRef}
             key={activeFilter}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -69,11 +82,22 @@ export function ProjectsGrid() {
             transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6"
           >
-            {filteredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
+            {shouldRenderCards
+              ? filteredProjects.map((project, index) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    eagerImage={index === 0}
+                    onOpenDetails={setActiveProject}
+                  />
+                ))
+              : Array.from({ length: 6 }).map((_, index) => (
+                  <ProjectCardSkeleton key={`projects-grid-skeleton-${index}`} />
+                ))}
           </motion.div>
         </AnimatePresence>
+
+        <ProjectDetailsOverlay project={activeProject} onClose={() => setActiveProject(null)} />
 
         {filteredProjects.length === 0 ? (
           <p className="mt-8 text-center font-mono text-xs uppercase tracking-[0.14em] text-[var(--color-text-muted)]">

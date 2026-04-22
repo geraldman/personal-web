@@ -2,6 +2,7 @@ import { IconType } from "react-icons";
 import {
   SiDocker,
   SiElastic,
+  SiFirebase,
   SiLinux,
   SiMarkdown,
   SiNextdotjs,
@@ -12,6 +13,7 @@ import {
   SiRedis,
   SiTailwindcss,
   SiTypescript,
+  SiVercel,
 } from "react-icons/si";
 
 export type TechIconConfig = {
@@ -21,16 +23,18 @@ export type TechIconConfig = {
 };
 
 export const techIcons: Record<string, TechIconConfig> = {
-  typescript: { icon: SiTypescript, label: "TypeScript", color: "var(--color-accent)" },
-  nextjs: { icon: SiNextdotjs, label: "Next.js", color: "var(--color-text-primary)" },
-  postgres: { icon: SiPostgresql, label: "PostgreSQL", color: "var(--color-accent-secondary)" },
-  docker: { icon: SiDocker, label: "Docker", color: "var(--color-accent)" },
-  react: { icon: SiReact, label: "React", color: "var(--color-accent-secondary)" },
-  tailwind: { icon: SiTailwindcss, label: "Tailwind CSS", color: "var(--color-accent-secondary)" },
-  node: { icon: SiNodedotjs, label: "Node.js", color: "var(--color-success)" },
-  elastic: { icon: SiElastic, label: "Elastic", color: "var(--color-warning)" },
-  markdown: { icon: SiMarkdown, label: "Markdown", color: "var(--color-text-secondary)" },
-  python: { icon: SiPython, label: "Python", color: "var(--color-accent-secondary)" },
-  linux: { icon: SiLinux, label: "Linux", color: "var(--color-text-primary)" },
-  redis: { icon: SiRedis, label: "Redis", color: "var(--color-danger)" },
+  typescript: { icon: SiTypescript, label: "TypeScript", color: "var(--brand-typescript)" },
+  nextjs: { icon: SiNextdotjs, label: "Next.js", color: "var(--brand-nextjs)" },
+  postgres: { icon: SiPostgresql, label: "PostgreSQL", color: "var(--brand-postgresql)" },
+  docker: { icon: SiDocker, label: "Docker", color: "var(--brand-docker)" },
+  react: { icon: SiReact, label: "React", color: "var(--brand-react)" },
+  tailwind: { icon: SiTailwindcss, label: "Tailwind CSS", color: "var(--brand-tailwindcss)" },
+  node: { icon: SiNodedotjs, label: "Node.js", color: "var(--brand-nodejs)" },
+  elastic: { icon: SiElastic, label: "Elastic", color: "var(--brand-elastic)" },
+  markdown: { icon: SiMarkdown, label: "Markdown", color: "var(--brand-markdown)" },
+  python: { icon: SiPython, label: "Python", color: "var(--brand-python)" },
+  linux: { icon: SiLinux, label: "Linux", color: "var(--brand-linux)" },
+  redis: { icon: SiRedis, label: "Redis", color: "var(--brand-redis)" },
+  firebase: { icon: SiFirebase, label: "Firebase", color: "var(--brand-firebase)" },
+  vercel: { icon: SiVercel, label: "Vercel", color: "var(--brand-vercel)" },
 };

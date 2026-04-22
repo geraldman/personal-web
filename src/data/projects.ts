@@ -4,12 +4,13 @@ export const projects: ProjectData[] = [
   {
     id: "WHISPXR",
     title: "WHISPXR",
-    description:
-      "Hardened gateway with JWT validation, anomaly detection, and request provenance controls.",
+    description: `A secure, end-to-end encrypted real-time messaging web application built for private, low-latency, and reliable communication.
+
+Key focus: robust session handling, message confidentiality, and production-grade realtime performance.`,
     category: "security",
     status: "live",
-    stack: ["typescript", "nextjs", "postgres", "docker"],
-    previewImage: "/gerald.webp",
+    stack: ["typescript", "nextjs", "firebase", "vercel"],
+    previewImage: "/assets/gerald.webp",
     previewVideo: "/assets/videos/secure-api-gateway-preview.mp4",
     featured: true,
     githubUrl: "https://github.com/yourusername/secure-api-gateway",
@@ -17,12 +18,13 @@ export const projects: ProjectData[] = [
   {
     id: "threat-hunt-dashboard",
     title: "Threat Hunt Dashboard",
-    description:
-      "Telemetry-first dashboard that correlates auth, network, and endpoint signals for triage.",
+    description: `Telemetry-first dashboard that correlates auth, network, and endpoint signals for triage.
+
+Designed to reduce analyst fatigue with faster pivoting, cleaner evidence trails, and actionable alerts.`,
     category: "web-development",
     status: "in-progress",
     stack: ["react", "tailwind", "node", "elastic"],
-    previewImage: "/gerald.webp",
+    previewImage: "/assets/",
     previewGif: "/assets/images/threat-hunt-dashboard-preview.gif",
     featured: true,
     githubUrl: "https://github.com/yourusername/threat-hunt-dashboard",
@@ -35,7 +37,7 @@ export const projects: ProjectData[] = [
     category: "ctf",
     status: "live",
     stack: ["markdown", "python", "linux"],
-    previewImage: "/gerald.webp",
+    previewImage: "/assets/gerald.webp",
     featured: true,
     writeupUrl: "/blog",
   },
@@ -47,7 +49,7 @@ export const projects: ProjectData[] = [
     category: "security",
     status: "archived",
     stack: ["python", "docker", "redis"],
-    previewImage: "/gerald.webp",
+    previewImage: "/assets/gerald.webp",
     githubUrl: "https://github.com/yourusername/auth-attack-simulator",
   },
 ];

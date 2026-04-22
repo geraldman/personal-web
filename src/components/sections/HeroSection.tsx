@@ -123,7 +123,7 @@ export function HeroSection() {
               Get in Touch
               
             </Button>
-            <Button href="/cv/CV_Rev.3_Gerald-Manurung.pdf" variant="outlined" download>
+            <Button href="/assets/cv/CV_Rev.3_Gerald-Manurung.pdf" variant="outlined" download>
               Download CV
             </Button>
           </motion.div>

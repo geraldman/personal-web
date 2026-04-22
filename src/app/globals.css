@@ -18,6 +18,20 @@
   --color-success: #00e5a0;
   --color-warning: #f0b429;
   --color-danger: #ff4d6a;
+  --brand-typescript: #3178c6;
+  --brand-nextjs: #ffffff;
+  --brand-postgresql: #4169e1;
+  --brand-docker: #2496ed;
+  --brand-react: #61dafb;
+  --brand-tailwindcss: #06b6d4;
+  --brand-nodejs: #339933;
+  --brand-elastic: #005571;
+  --brand-markdown: #ffffff;
+  --brand-python: #3776ab;
+  --brand-linux: #fcc624;
+  --brand-redis: #dc382d;
+  --brand-firebase: #dd2c00;
+  --brand-vercel: #ffffff;
   --max-width: 1200px;
   --nav-height: 65px;
   --font-body: var(--font-geist-sans);
@@ -101,5 +115,30 @@
   .container-width {
     margin-inline: auto;
     width: min(100%, var(--max-width));
+  }
+
+  .overlay-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-hover) transparent;
+  }
+
+  .overlay-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .overlay-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .overlay-scrollbar::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: var(--color-border-hover);
+    background-clip: content-box;
+  }
+
+  .overlay-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-dim);
+    background-clip: content-box;
   }
 }
