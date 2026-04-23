@@ -191,7 +191,8 @@ export function Navbar() {
           }
         }}
         className={cn(
-          "relative mx-auto flex items-center justify-between overflow-hidden border",
+          "relative mx-auto flex flex-col items-center justify-between border",
+          isNormalPhase ? "overflow-visible" : "overflow-hidden",
           isLoadingPhase && "z-[70]",
           "border-[var(--color-border)] bg-[var(--color-surface)]/80",
           "transition-[box-shadow,backdrop-filter] duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]",
@@ -282,7 +283,7 @@ export function Navbar() {
 
           <motion.button
             type="button"
-            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text-primary)] lg:hidden"
+            className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full text-[var(--color-text-primary)] lg:hidden"
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-expanded={mobileOpen}
             aria-label="Toggle menu"
@@ -297,11 +298,11 @@ export function Navbar() {
         <AnimatePresence>
           {mobileOpen && isNormalPhase ? (
             <motion.nav
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="grid gap-2 px-4 pb-4 lg:hidden"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="absolute left-0 right-0 top-full z-40 mt-2 grid w-full gap-2 overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] px-4 pb-4 pt-2 shadow-[0_10px_28px_rgba(0,0,0,0.35)] lg:hidden"
             >
               {NAV_LINKS.map((link) => {
                 const active = isActivePath(pathname, link.href);
@@ -312,8 +313,8 @@ export function Navbar() {
                     href={link.href}
                     onClick={() => setMobileOpen(false)}
                     className={cn(
-                      "flex min-h-[44px] items-center rounded-2xl border border-[var(--color-border)] px-4 font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-text-secondary)]",
-                      active && "border-[var(--color-border-hover)] text-[var(--color-accent)]",
+                      "flex min-h-[44px] items-center rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] px-4 font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-text-secondary)]",
+                      active && "border-[var(--color-border-hover)] bg-[var(--color-accent-dim)] text-[var(--color-accent)]",
                     )}
                   >
                     {link.label}

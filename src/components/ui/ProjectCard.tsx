@@ -110,7 +110,7 @@ export function ProjectCard({ project, eagerImage = false, onOpenDetails }: Proj
           </div>
         </div>
 
-        <div className="mb-4 flex items-start justify-between gap-3">
+        <div className="mb-2 flex items-start justify-between gap-3">
           <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">{project.title}</h3>
           <span className="font-mono text-xs uppercase tracking-wider">
             <span className={statusStyle[project.status]}>●</span> {project.status}
