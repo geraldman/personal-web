@@ -190,6 +190,10 @@ export function Navbar() {
             setBootPhase("normal");
           }
         }}
+        style={{
+          transform: "translateZ(0)",
+          willChange: "transform, opacity",
+        }}
         className={cn(
           "relative mx-auto flex flex-col items-center justify-between border",
           isNormalPhase ? "overflow-visible" : "overflow-hidden",

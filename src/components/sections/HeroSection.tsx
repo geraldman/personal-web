@@ -1,8 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useInView } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { TopographyBackground } from "@/components/ui/reactBackground";
 
@@ -13,6 +12,8 @@ const EDITED_STATUS_WIDTHS = STATUS_WIDTHS.map(n => `${parseFloat(n) * 1.5}ch`);
 // ["45ch", "39ch"]
 
 export function HeroSection() {
+  const heroRef = useRef<HTMLElement | null>(null);
+  const isHeroInView = useInView(heroRef, { amount: 0.1 });
   const [statusIndex, setStatusIndex] = useState(0);
   const [isHeroReady, setIsHeroReady] = useState(false);
 
@@ -45,7 +46,7 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative isolate min-h-screen overflow-hidden">
+    <section ref={heroRef} className="relative isolate min-h-screen overflow-hidden">
       <TopographyBackground
         className="pointer-events-none absolute inset-0 z-0 scale-[1.06]"
         lineCount={15}
@@ -53,7 +54,7 @@ export function HeroSection() {
         maxDpr={1.5}
         strokeWidth={1.5}
         lineColor="rgba(120, 120, 120, 0.5)"
-        paused={!isHeroReady}
+        paused={!isHeroReady || !isHeroInView}
       />
 
       <div className="relative z-20 flex min-h-[100vh] items-center">
