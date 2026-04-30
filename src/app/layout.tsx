@@ -43,6 +43,7 @@ export default function RootLayout({
       lang="en"
       className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
     >
+      <meta name="google-site-verification" content="N4ko7eULRcSChLP4-vVMp88DVoMRqwV-A91XEBRoLUg" />
       <body className="min-h-full bg-[var(--color-bg)] text-[var(--color-text-primary)]">
         <Navbar />
         <main>{children}</main>
