@@ -4,7 +4,7 @@ import { fetchGithubCommit } from "./github-commit-fetch";
 export const OWNER_NAME = "Gerald";
 
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://gerald-manurung.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://geraldmanurung.site";
 
 export const NAV_LINKS: NavLink[] = [
   { label: "Home", href: "/" },
@@ -37,7 +37,7 @@ const STATIC_STATS = {
   certificates: 1,
 } as const;
 
-const activateGithubStat = false; // replace true in prod
+const activateGithubStat = true; // replace true in prod
 
 export async function getStatTicker() {
   const commitCount = activateGithubStat ? await fetchGithubCommit() : 100;
