@@ -10,12 +10,40 @@ export interface ProjectData {
   status: ProjectStatus;
   stack: string[];
   previewImage?: string;
+  previewImages?: string[];
   previewGif?: string;
   previewVideo?: string;
   featured?: boolean;
   githubUrl?: string;
   liveUrl?: string;
   writeupUrl?: string;
+}
+
+export type CertificateStatus = "completed" | "in-progress" | "planned";
+
+export interface CertificateData {
+  id: string;
+  title: string;
+  issuer: string;
+  status: CertificateStatus;
+  summary: string;
+  date: string;
+  previewImage?: string;
+  credentialUrl?: string;
+  badgeUrl?: string;
+}
+
+export type BlogCategory = "security" | "ctf" | "template";
+
+export interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+  category: BlogCategory;
+  readTime: string;
+  tags?: string[];
+  toc?: Array<{ id: string; label: string }>;
 }
 
 export interface NavLink {

@@ -59,6 +59,7 @@ export default function RootLayout({
       lang="en"
       className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
     >
+      <Analytics/>
       <head>
         <script
           type="application/ld+json"

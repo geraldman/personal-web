@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { FiExternalLink, FiX } from "react-icons/fi";
 import { TechIcon } from "@/components/ui/TechIcon";
@@ -24,7 +24,22 @@ const statusStyle: Record<ProjectData["status"], string> = {
 export function ProjectDetailsOverlay({ project, onClose }: ProjectDetailsOverlayProps) {
   const [isFrameReady, setIsFrameReady] = useState(false);
   const [, setLoadedImageVersion] = useState(0);
-  const loadedImageIdsRef = useRef<Set<string>>(new Set());
+  const loadedImageUrlsRef = useRef<Set<string>>(new Set());
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  const imageUrls = useMemo(() => {
+    if (!project) {
+      return [];
+    }
+
+    if (project.previewImages && project.previewImages.length > 0) {
+      return project.previewImages.filter(Boolean);
+    }
+
+    return project.previewImage ? [project.previewImage] : [];
+  }, [project]);
+
+  const activeImage = imageUrls[activeImageIndex] ?? imageUrls[0];
 
   useEffect(() => {
     if (!project) {
@@ -43,41 +58,51 @@ export function ProjectDetailsOverlay({ project, onClose }: ProjectDetailsOverla
   }, [project]);
 
   useEffect(() => {
-    if (!project?.previewImage) {
+    if (!project) {
       return;
     }
 
-    if (loadedImageIdsRef.current.has(project.id)) {
+    setActiveImageIndex(0);
+  }, [project]);
+
+  useEffect(() => {
+    if (!project || imageUrls.length === 0) {
       return;
     }
 
     let cancelled = false;
-    const preloadImage = new window.Image();
-    preloadImage.src = project.previewImage;
-    preloadImage.onload = () => {
-      if (cancelled) {
+
+    imageUrls.forEach((imageUrl) => {
+      if (!imageUrl || loadedImageUrlsRef.current.has(imageUrl)) {
         return;
       }
 
-      loadedImageIdsRef.current.add(project.id);
-      setLoadedImageVersion((version) => version + 1);
-    };
-    preloadImage.onerror = () => {
-      if (cancelled) {
-        return;
-      }
+      const preloadImage = new window.Image();
+      preloadImage.src = imageUrl;
+      preloadImage.onload = () => {
+        if (cancelled) {
+          return;
+        }
 
-      loadedImageIdsRef.current.add(project.id);
-      setLoadedImageVersion((version) => version + 1);
-    };
+        loadedImageUrlsRef.current.add(imageUrl);
+        setLoadedImageVersion((version) => version + 1);
+      };
+      preloadImage.onerror = () => {
+        if (cancelled) {
+          return;
+        }
+
+        loadedImageUrlsRef.current.add(imageUrl);
+        setLoadedImageVersion((version) => version + 1);
+      };
+    });
 
     return () => {
       cancelled = true;
     };
-  }, [project]);
+  }, [project, imageUrls]);
 
-  const isImageReady =
-    !project?.previewImage || (project ? loadedImageIdsRef.current.has(project.id) : false);
+  const isImageReady = !activeImage || loadedImageUrlsRef.current.has(activeImage);
   const isOverlayLoading = Boolean(project) && (!isFrameReady || !isImageReady);
 
   useEffect(() => {
@@ -182,15 +207,57 @@ export function ProjectDetailsOverlay({ project, onClose }: ProjectDetailsOverla
                     {project.description}
                   </p>
 
-                  {project.previewImage ? (
+                  {activeImage ? (
                     <div className="relative mt-5 aspect-[16/9] w-full overflow-hidden rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-hover)]">
-                      <Image
-                        src={project.previewImage}
-                        alt={`${project.title} preview`}
-                        fill
-                        sizes="(min-width: 1280px) 48rem, (min-width: 768px) 80vw, 100vw"
-                        className="object-cover object-center"
-                      />
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={activeImage}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
+                          className="absolute inset-0"
+                        >
+                          <Image
+                            src={activeImage}
+                            alt={`${project.title} preview`}
+                            fill
+                            sizes="(min-width: 1280px) 48rem, (min-width: 768px) 80vw, 100vw"
+                            className="object-cover object-center"
+                          />
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+                  ) : null}
+
+                  {imageUrls.length > 1 ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {imageUrls.map((imageUrl, index) => {
+                        const isActive = index === activeImageIndex;
+
+                        return (
+                          <button
+                            key={`${project.id}-preview-${index}`}
+                            type="button"
+                            onClick={() => setActiveImageIndex(index)}
+                            aria-pressed={isActive}
+                            aria-label={`Show preview image ${index + 1}`}
+                            className={`relative h-14 w-24 overflow-hidden rounded-lg border transition-colors duration-150 ${
+                              isActive
+                                ? "border-[var(--color-border-hover)]"
+                                : "border-[var(--color-border)]"
+                            }`}
+                          >
+                            <Image
+                              src={imageUrl}
+                              alt={`${project.title} preview ${index + 1}`}
+                              fill
+                              sizes="96px"
+                              className="object-cover object-center"
+                            />
+                          </button>
+                        );
+                      })}
                     </div>
                   ) : null}
 

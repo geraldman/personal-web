@@ -24,6 +24,7 @@ export function ProjectCard({ project, eagerImage = false, onOpenDetails }: Proj
   const shownStack = project.stack.slice(0, 6);
   const hiddenCount = project.stack.length > 6 ? project.stack.length - 5 : 0;
   const hasHoverMedia = Boolean(project.previewVideo || project.previewGif);
+  const primaryImage = project.previewImage ?? project.previewImages?.[0];
 
   const handleOpenDetails = () => {
     onOpenDetails?.(project);
@@ -50,7 +51,7 @@ export function ProjectCard({ project, eagerImage = false, onOpenDetails }: Proj
   };
 
   return (
-    <article className="group glass rounded-2xl p-5 transition-transform duration-200 hover:scale-[1.02] hover:border-[var(--color-border-hover)]">
+    <article className="group glass rounded-2xl p-4 pt-5 transition-transform duration-200 hover:scale-[1.02] hover:border-[var(--color-border-hover)]">
       <button
         type="button"
         onClick={handleOpenDetails}
@@ -65,9 +66,9 @@ export function ProjectCard({ project, eagerImage = false, onOpenDetails }: Proj
             onFocus={handlePreviewStart}
             onBlur={handlePreviewStop}
           >
-            {project.previewImage ? (
+            {primaryImage ? (
               <Image
-                src={project.previewImage}
+                src={primaryImage}
                 alt={`${project.title} preview`}
                 fill
                 loading={eagerImage ? "eager" : "lazy"}
@@ -101,7 +102,7 @@ export function ProjectCard({ project, eagerImage = false, onOpenDetails }: Proj
                 loop
                 playsInline
                 preload="metadata"
-                poster={project.previewImage}
+                poster={primaryImage}
                 className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-within:opacity-100"
               >
                 <source src={project.previewVideo} type="video/mp4" />

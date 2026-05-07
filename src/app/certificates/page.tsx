@@ -1,6 +1,16 @@
+"use client";
+
 import { PageHeader } from "@/components/shared/PageHeader";
+import { CertificateCard } from "@/components/ui/CertificateCard";
+import { CertificateDetailsOverlay } from "@/components/ui/CertificateDetailsOverlay";
+import { certificates } from "@/data/certificates";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import { CertificateData } from "@/types";
 
 export default function CertificatesPage() {
+  const certificateList = certificates;
+  const [activeCertificate, setActiveCertificate] = useState<CertificateData | null>(null);
   return (
     <>
       <PageHeader
@@ -9,12 +19,31 @@ export default function CertificatesPage() {
         description="This page is intentionally kept as a shell and will be populated with verifiable credentials."
       />
       <section className="section-padding pt-0">
-        <div className="container-width rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6">
-          <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--color-text-muted)]">
-            {"// certificates content coming soon"}
-          </p>
+        <div className="container-width">
+          <AnimatePresence mode="wait">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6"
+            >
+              {certificateList.map((slot) => (
+                <CertificateCard
+                  key={slot.id}
+                  certificate={slot}
+                  onOpenDetails={setActiveCertificate}
+                />
+              ))}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
+
+      <CertificateDetailsOverlay
+        certificate={activeCertificate}
+        onClose={() => setActiveCertificate(null)}
+      />
     </>
   );
 }

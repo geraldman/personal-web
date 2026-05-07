@@ -25,6 +25,7 @@
   --brand-react: #61dafb;
   --brand-tailwindcss: #06b6d4;
   --brand-nodejs: #339933;
+  --brand-express: #ffffff;
   --brand-elastic: #005571;
   --brand-markdown: #ffffff;
   --brand-python: #3776ab;
@@ -32,6 +33,7 @@
   --brand-redis: #dc382d;
   --brand-firebase: #dd2c00;
   --brand-vercel: #ffffff;
+  --brand-supabase: #3ECF8E;
   --max-width: 1200px;
   --nav-height: 65px;
   --font-body: var(--font-geist-sans);
@@ -109,7 +111,7 @@
   }
 
   .section-padding {
-    padding: 6rem 1.5rem;
+    padding: 6rem 1.5rem 2rem;
   }
 
   .container-width {

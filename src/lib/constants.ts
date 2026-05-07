@@ -69,3 +69,22 @@ export async function getStatTicker() {
     },
   ] satisfies StatTickerItem[];
 }
+
+export const skillGroups = [
+  {
+    title: "Engineering",
+    items: ["TypeScript", "Next.js", "Node.js", "PostgreSQL"],
+  },
+  {
+    title: "Security",
+    items: ["Threat Modeling", "AppSec", "Authentication", "Hardening"],
+  },
+  {
+    title: "Operations",
+    items: ["Docker", "Linux", "Monitoring", "CI/CD"],
+  },
+  {
+    title: "Workflow",
+    items: ["Architecture", "Code Review", "Automation", "Testing"],
+  },
+];

@@ -1,26 +1,13 @@
+"use client";
+
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-
-const skillGroups = [
-  {
-    title: "Engineering",
-    items: ["TypeScript", "Next.js", "Node.js", "PostgreSQL"],
-  },
-  {
-    title: "Security",
-    items: ["Threat Modeling", "AppSec", "Authentication", "Hardening"],
-  },
-  {
-    title: "Operations",
-    items: ["Docker", "Linux", "Monitoring", "CI/CD"],
-  },
-  {
-    title: "Workflow",
-    items: ["Architecture", "Code Review", "Automation", "Testing"],
-  },
-];
+import { skillGroups } from "@/lib/constants";
 
 export function SkillsSection() {
+
+  const skillsGroup = skillGroups;
+  
   return (
     <AnimatedSection id="skills">
       <div className="container-width">
@@ -31,7 +18,7 @@ export function SkillsSection() {
         />
 
         <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 lg:gap-6">
-          {skillGroups.map((group) => (
+          {skillsGroup.map((group) => (
             <article key={group.title} className="glass rounded-2xl p-5">
               <h3 className="mb-3 text-lg font-semibold text-[var(--color-text-primary)]">
                 {group.title}

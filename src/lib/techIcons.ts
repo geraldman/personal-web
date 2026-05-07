@@ -1,6 +1,7 @@
 import { IconType } from "react-icons";
 import {
   SiDocker,
+  SiExpress,
   SiElastic,
   SiFirebase,
   SiLinux,
@@ -11,6 +12,7 @@ import {
   SiPython,
   SiReact,
   SiRedis,
+  SiSupabase,
   SiTailwindcss,
   SiTypescript,
   SiVercel,
@@ -30,6 +32,7 @@ export const techIcons: Record<string, TechIconConfig> = {
   react: { icon: SiReact, label: "React", color: "var(--brand-react)" },
   tailwind: { icon: SiTailwindcss, label: "Tailwind CSS", color: "var(--brand-tailwindcss)" },
   node: { icon: SiNodedotjs, label: "Node.js", color: "var(--brand-nodejs)" },
+  express: { icon: SiExpress, label: "Express", color: "var(--brand-express)" },
   elastic: { icon: SiElastic, label: "Elastic", color: "var(--brand-elastic)" },
   markdown: { icon: SiMarkdown, label: "Markdown", color: "var(--brand-markdown)" },
   python: { icon: SiPython, label: "Python", color: "var(--brand-python)" },
@@ -37,4 +40,5 @@ export const techIcons: Record<string, TechIconConfig> = {
   redis: { icon: SiRedis, label: "Redis", color: "var(--brand-redis)" },
   firebase: { icon: SiFirebase, label: "Firebase", color: "var(--brand-firebase)" },
   vercel: { icon: SiVercel, label: "Vercel", color: "var(--brand-vercel)" },
+  supabase: { icon: SiSupabase, label: "Supabase", color: "var(--brand-supabase)"},
 };
