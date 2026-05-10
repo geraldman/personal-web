@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     template: "%s | Gerald",
   },
   description:
-    "Portfolio of Gerald, a full-stack developer and security researcher focused on resilient web systems.",
+    "Portfolio of Gerald, a full-stack developer and security engineer focused on resilient web systems.",
   alternates: {
     canonical: SITE_URL,
   },
