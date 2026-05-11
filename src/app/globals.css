@@ -34,18 +34,35 @@
   --brand-firebase: #dd2c00;
   --brand-vercel: #ffffff;
   --brand-supabase: #3ECF8E;
+  --brand-n8n: #ea4b71;
+  --brand-cplusplus: #00599c;
+  --brand-laravel: #ff2d20;
+  --brand-nginx: #009639;
+  --brand-bash: #4eaa25;
+  --brand-java: #007396;
+  --brand-php: #777bb4;
+  --brand-mysql: #4479a1;
+  --brand-git: #f05032;
+  --brand-wireshark: #1679a7;
+  --brand-burpsuite: #ff6633;
+  --brand-html: #E44D26;
+  --brand-css: #663399;
+  --brand-javascript: #F0DB4F;
   --max-width: 1200px;
   --nav-height: 65px;
   --font-body: var(--font-geist-sans);
   --font-code: var(--font-geist-mono);
+  
 }
 
 @theme inline {
   --font-sans: var(--font-body);
   --font-mono: var(--font-code);
+  --breakpoint-xs: 480px;
 }
 
 @layer base {
+
   *,
   *::before,
   *::after {
@@ -55,8 +72,6 @@
   html,
   body {
     min-height: 100%;
-    /* -ms-overflow-style: none;
-    scrollbar-width: none; */
   }
 
   html {
@@ -81,11 +96,6 @@
     background: var(--color-accent-dim);
     color: var(--color-text-primary);
   }
-
-  /* html::-webkit-scrollbar,
-  body::-webkit-scrollbar{
-    display: none;
-  } */
 }
 
 @layer utilities {
@@ -100,11 +110,9 @@
   }
 
   .text-gradient {
-    background: linear-gradient(
-      112deg,
-      var(--color-accent) 0%,
-      var(--color-accent-secondary) 100%
-    );
+    background: linear-gradient(112deg,
+        var(--color-accent) 0%,
+        var(--color-accent-secondary) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -142,5 +150,66 @@
   .overlay-scrollbar::-webkit-scrollbar-thumb:hover {
     background: var(--color-accent-dim);
     background-clip: content-box;
+  }
+
+  /* ─── Marquee ─────────────────────────────────────────── */
+
+  /*
+   * The marquee wrapper must be a block-level box that is:
+   *   1. width: 100%      — fills the grid column, never exceeds it
+   *   2. min-width: 0     — THE KEY FIX: flex/grid children default to
+   *                         min-width: auto, which lets them grow to
+   *                         fit their max-content child (the track).
+   *                         Setting min-width: 0 allows the box to
+   *                         shrink and actually clip the track.
+   *   3. overflow: hidden — clips the scrolling track
+   */
+  .marquee {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  .marquee-track {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    width: max-content;
+    /* intentionally wider — .marquee clips it */
+    animation: marquee-left var(--marquee-duration-mobile, 24s) linear infinite;
+    will-change: transform;
+    touch-action: pan-y;
+  }
+
+  @media (min-width: 640px) {
+    .marquee-track {
+      gap: 0.5rem;
+      animation-duration: var(--marquee-duration, 36s);
+    }
+  }
+
+  .marquee-track[data-direction="right"] {
+    animation-direction: reverse;
+  }
+
+  .marquee-track[data-paused="true"] {
+    animation-play-state: paused;
+  }
+
+  .marquee-item {
+    flex: 0 0 auto;
+  }
+}
+
+@keyframes marquee-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
   }
 }

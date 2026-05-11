@@ -19,7 +19,7 @@ export interface ProjectData {
   writeupUrl?: string;
 }
 
-export type CertificateStatus = "completed" | "in-progress" | "planned";
+export type CertificateStatus = "web" | "security" | "community";
 
 export interface CertificateData {
   id: string;
@@ -63,4 +63,12 @@ export interface StatTickerItem {
   value: string;
   description: string;
   icon: StatTickerIcon;
+}
+
+export interface TimelineItem {
+    id: string;
+    title: string;
+    org: string;
+    period: string;
+    highlights: string[];
 }

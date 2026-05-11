@@ -10,11 +10,11 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Gerald Manurung | Full-Stack Developer and Security Engineer",
+    default: "Gerald Manurung | Security-focused Informatics Student & Full-Stack Engineer.",
     template: "%s | Gerald",
   },
   description:
-    "Portfolio of Gerald, a full-stack developer and security engineer focused on resilient web systems.",
+    "Portfolio of Gerald, a full-stack developer focused on making a secure and resilient web systems.",
   alternates: {
     canonical: SITE_URL,
   },
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     apple: "/logo.png",
   },
   openGraph: {
-    title: "Gerald Manurung | Full-Stack Developer and Security Engineer",
+    title: "Gerald Manurung | Security-focused Informatics Student & Full-Stack Engineer.",
     description:
       "Modern engineering and security portfolio with focused projects and practical research.",
     url: SITE_URL,
@@ -50,7 +50,7 @@ export default function RootLayout({
     name: "Gerald Manurung",
     url: SITE_URL,
     image: new URL("/gerald.webp", SITE_URL).toString(),
-    jobTitle: "Full-Stack Developer and Security Engineer",
+    jobTitle: "Security-focused Informatics Student & Full-Stack Engineer.",
     sameAs: SOCIAL_LINKS.map((link) => link.href),
   });
 

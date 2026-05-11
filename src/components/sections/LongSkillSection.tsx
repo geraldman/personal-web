@@ -8,7 +8,7 @@ import { useInView } from "framer-motion";
 import { label } from "framer-motion/client";
 import { useRef, type CSSProperties } from "react";
 
-export function SkillsSection() {
+export function LongSkillsSection() {
   const marqueeRef = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(marqueeRef, { amount: 0.2 });
   const securityValues = [
@@ -64,7 +64,7 @@ export function SkillsSection() {
           description="The core technologies I use to build resilient systems and automate complex workflows."
         />
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[minmax(0,6fr)_minmax(0,3fr)] lg:items-start xl:gap-8">
+        <div className="mt-10">
           <div ref={marqueeRef} className="min-w-0 space-y-4 sm:space-y-6">
             {rows.map((row, rowIndex) => (
               <div key={`skills-row-${rowIndex}`} className="marquee">
@@ -144,29 +144,6 @@ export function SkillsSection() {
               </div>
             ))}
           </div>
-
-          <aside className="glass rounded-2xl p-5 sm:p-6">
-            <p className="font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-text-muted)]">
-              // security values
-            </p>
-            <h3 className="mt-3 text-lg font-semibold text-[var(--color-text-primary)]">
-              Principles that guide the work
-            </h3>
-            <p className="mt-3 text-sm text-[var(--color-text-secondary)] lg:text-base">
-              Beyond the tools, these are the security lenses I apply to every build.
-            </p>
-            <ul className="mt-5 space-y-3">
-              {securityValues.map((value) => (
-                <li key={value} className="flex items-start gap-3 text-sm text-[var(--color-text-secondary)]">
-                  <span
-                    className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"
-                    aria-hidden="true"
-                  />
-                  <span>{value}</span>
-                </li>
-              ))}
-            </ul>
-          </aside>
         </div>
       </div>
     </AnimatedSection>

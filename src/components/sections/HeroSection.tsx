@@ -102,16 +102,16 @@ export function HeroSection() {
             transition={{ duration: 0.65, delay: 0.24, ease: heroEasing }}
             className="mt-5 max-w-2xl text-base text-[var(--color-text-secondary)] lg:text-xl"
           >
-            Full-Stack Developer and Security Engineer.
+            Security-focused Informatics Student & Full-Stack Engineer.
           </motion.p>
 
           <motion.p
             initial={false}
             animate={isHeroReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
             transition={{ duration: 0.65, delay: 0.36, ease: heroEasing }}
-            className="mt-3 max-w-2xl text-sm text-[var(--color-text-secondary)] lg:text-base"
+            className="mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-[var(--color-text-secondary)] sm:text-base lg:text-lg"
           >
-            I build resilient and scalable systems, secure modern web stacks, and make sure they stay that way.
+            Full-stack engineer and Google Student Ambassador focused on defensive security. I design resilient, high-performance systems while specializing in AI-driven compliance tool and secure messaging protocols.
           </motion.p>
 
           <motion.div

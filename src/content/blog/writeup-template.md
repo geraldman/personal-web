@@ -1,7 +1,7 @@
 <!--
 meta
 {
-	"title": "Writeup template for CTF and security",
+	"title": "Coming Soon - CTF Writeups and Blogs",
 	"excerpt": "Reusable structure for investigations with clear context, evidence, and fix notes.",
 	"date": "2026-05-05",
 	"category": "template",

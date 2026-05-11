@@ -146,8 +146,8 @@ export function ContactSection() {
         <div>
           <SectionHeader
             label="contact"
-            title="Let us build something resilient"
-            description="Send your details and message below. The full secure RPC workflow will be wired to Resend next."
+            title="Establish a reliable connection"
+          description="Secure communications start here. Reach out to discuss system architecture, security audits, or full-stack engineering—wired directly to my inbox."
           />
 
           {notification.type && (
@@ -167,10 +167,6 @@ export function ContactSection() {
             noValidate
             onSubmit={handleSubmit}
           >
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-              {"// contact form base template"}
-            </p>
-
             <div>
               <label
                 htmlFor="contact-name"

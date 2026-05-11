@@ -42,15 +42,15 @@ export const projects: ProjectData[] = [
     featured: true,
     writeupUrl: "/blog",
   },
-  {
-    id: "auth-attack-simulator",
-    title: "Auth Attack Simulator",
-    description:
-      "Simulation suite for brute force, token replay, and MFA bypass defense testing.",
-    category: "security",
-    status: "archived",
-    stack: ["python", "docker", "redis"],
-    previewImage: "/assets/gerald.webp",
-    githubUrl: "https://github.com/yourusername/auth-attack-simulator",
-  },
+  // {
+  //   id: "auth-attack-simulator",
+  //   title: "Auth Attack Simulator",
+  //   description:
+  //     "Simulation suite for brute force, token replay, and MFA bypass defense testing.",
+  //   category: "security",
+  //   status: "archived",
+  //   stack: ["python", "docker", "redis"],
+  //   previewImage: "/assets/gerald.webp",
+  //   githubUrl: "https://github.com/yourusername/auth-attack-simulator",
+  // },
 ];

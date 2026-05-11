@@ -574,7 +574,16 @@
       "Never bypass server-side validation.",
       "Never switch from Resend without updating this document."
     ]
-  }
+  },
+
+  "work_log": [
+    {
+      "date": "2026-05-11",
+      "summary": "Drafted a detailed About page template and experience timeline (sections + data model).",
+      "status": "reverted",
+      "notes": "Scaffold files were reverted by the user; no active changes remain in the repo."
+    }
+  ]
 }
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.

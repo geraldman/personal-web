@@ -32,9 +32,9 @@ export const NAVBAR_BOOT_DEBUG =
 export const NAVBAR_BOOT_DEBUG_MS = 5000;
 
 const STATIC_STATS = {
-  projects: "5+",
-  years: 1,
-  certificates: 1,
+  projects: "7+",
+  years: 2,
+  certificates: "99%",
 } as const;
 
 const activateGithubStat = true; // replace true in prod
@@ -63,8 +63,8 @@ export async function getStatTicker() {
     },
     {
       id: "certificates",
-      value: `${STATIC_STATS.certificates}+`,
-      description: "Security certificates",
+      value: `${STATIC_STATS.certificates}`,
+      description: "Performance uptime",
       icon: "certificates",
     },
   ] satisfies StatTickerItem[];

@@ -1,6 +1,6 @@
 import { PageHeader } from "@/components/shared/PageHeader";
-import { AboutSection } from "@/components/sections/AboutSection";
-import { SkillsSection } from "@/components/sections/SkillsSection";
+import { DetailedAboutSection } from "@/components/sections/DetailedAboutSection";
+import { LongSkillsSection } from "@/components/sections/LongSkillSection";
 
 export default function AboutPage() {
   return (
@@ -10,8 +10,8 @@ export default function AboutPage() {
         title="About Gerald"
         description="Background, methods, and the approach behind my engineering and security work."
       />
-      <AboutSection />
-      <SkillsSection />
+      <DetailedAboutSection />
+      <LongSkillsSection />
     </>
   );
 }
