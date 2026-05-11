@@ -14,6 +14,9 @@ const STATUS_LABELS: Record<CertificateStatus, string> = {
   web: "Web Development",
   security: "Security",
   community: "Community and Leadership",
+  "in-progress": "In Progress",
+  completed: "Completed",
+  planned: "Planned",
 };
 
 export default function CertificatesPage() {

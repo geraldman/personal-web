@@ -17,6 +17,9 @@ const statusTone: Record<CertificateData["status"], string> = {
   completed: "text-[var(--color-success)]",
   "in-progress": "text-[var(--color-warning)]",
   planned: "text-[var(--color-text-muted)]",
+  web: "",
+  security: "",
+  community: "",
 };
 
 export function CertificateDetailsOverlay({ certificate, onClose }: CertificateDetailsOverlayProps) {
