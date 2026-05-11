@@ -39,8 +39,28 @@ export const projects: ProjectData[] = [
     status: "live",
     stack: ["markdown", "python", "linux"],
     previewImage: "/images/writeup-cover.png",
-    featured: true,
+    featured: false,
     writeupUrl: "/blog",
+  },
+  {
+    id: "bebas-qc",
+    title: "Bebas QC",
+    description:
+      `Bebas QC is an AI-driven quality control solution designed to replace slow, manual inspections in high-speed manufacturing environments, such as those at Reckitt Benckiser. It is used as a prototype for submission at AI Open Innovation Challenge 2026.
+
+By utilizing  computer vision and real-time sensor data, the system monitors production lines to detect physical defects like dents or misaligned labels within milliseconds. Unlike standard cameras, it functions as a "factory brain" that performs Root Cause Analysis (RCA), cross-referencing anomalies with machine vibrations or temperatures to diagnose exactly why a failure occurred and recommending immediate corrective actions.
+
+The system streamlines industrial workflows by delivering high-severity alerts directly to operators via Telegram or WhatsApp, ensuring that issues are addressed before they escalate into costly downtime. Beyond immediate fixes, Bebas QC leverages historical data for predictive maintenance, identifying long-term patterns to prevent defects before they happen. By catching errors in seconds rather than hours, the platform helps manufacturers protect their bottom line and potentially saving millions in revenue typically lost to unplanned downtime and product waste.
+
+This prototype features a centralized digital dashboard that provides real-time visibility into production line performance and anomaly detection. To demonstrate the system's capabilities, an IoT simulator injects high-fidelity fabricated data into the environment via an MQTT broker, simulating live industrial activity and stress-testing the detection algorithms.
+
+When the system identifies a performance deviation or defect, it triggers an automated response sequence. Using n8n for seamless workflow orchestration, the system instantaneously pushes critical alerts to Telegram or WhatsApp. This ensures that the right personnel receive actionable intelligence the moment an anomaly is detected, bridging the gap between data perception and manual intervention.`,
+    category: "web-development",
+    status: "in-progress",
+    stack: ["go", "redis", "vite", "postgres", "docker", "hivemq", "n8n", "nginx", "react", "tailwind"],
+    previewImages: ["/images/bebasqc/bebasqc1.png", "/images/bebasqc/bebasqc2.png", "/images/bebasqc/bebasqc3.png", "/images/bebasqc/bebasqc4.png"],
+    featured: true,
+    githubUrl: "https://github.com/geraldman/bebas-qc",
   },
   // {
   //   id: "auth-attack-simulator",

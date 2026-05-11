@@ -7,45 +7,11 @@ import { techIcons } from "@/lib/techIcons";
 import { useInView } from "framer-motion";
 import { label } from "framer-motion/client";
 import { useRef, type CSSProperties } from "react";
+import { techItems, securityValues } from "@/data/techItems";
 
 export function SkillsSection() {
   const marqueeRef = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(marqueeRef, { amount: 0.2 });
-  const securityValues = [
-    "Cryptography",
-    "Web Security Best Practices",
-    "Cybersecurity Compliance Framework",
-  ];
-
-  const techItems = [
-    { key: "html", label: "HTML"},
-    { key: "css", label: "CSS"},
-    { key: "javascript", label: "Javascript"},
-    { key: "cplusplus", label: "C++" },
-    { key: "python", label: "Python" },
-    { key: "typescript", label: "TypeScript" },
-    { key: "bash", label: "Bash" },
-    { key: "java", label: "Java" },
-    { key: "php", label: "PHP" },
-    { key: "sql", label: "SQL", badge: "SQL", matchKeys: ["mysql", "postgres", "postgresql"] },
-    { key: "react", label: "React" },
-    { key: "nextjs", label: "Next.js" },
-    { key: "node", label: "Node.js" },
-    { key: "express", label: "Express.js" },
-    { key: "laravel", label: "Laravel" },
-    { key: "tailwind", label: "Tailwind CSS" },
-    { key: "wireshark", label: "Wireshark" },
-    { key: "wazuh", label: "Wazuh", badge: "WZ" },
-    { key: "burpsuite", label: "Burp Suite" },
-    { key: "git", label: "Git" },
-    { key: "docker", label: "Docker" },
-    { key: "n8n", label: "n8n" },
-    { key: "nginx", label: "Nginx" },
-    { key: "supabase", label: "Supabase" },
-    { key: "mysql", label: "MySQL" },
-    { key: "postgres", label: "PostgreSQL", matchKeys: ["postgres", "postgresql"] },
-    { key: "redis", label: "Redis" },
-  ];
 
   const rows = [techItems.slice(0, 14), techItems.slice(14)];
 

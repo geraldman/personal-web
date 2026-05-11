@@ -30,6 +30,9 @@ import {
   SiHtml5,
   SiCss,
   SiJavascript,
+  SiVite,
+  SiGo,
+  SiHivemq,
 } from "react-icons/si";
 
 import {
@@ -60,6 +63,8 @@ export const techIcons: Record<string, TechIconConfig> = {
   laravel: { icon: SiLaravel, label: "Laravel", color: "var(--brand-laravel)" },
   nginx: { icon: SiNginx, label: "Nginx", color: "var(--brand-nginx)" },
   n8n: { icon: SiN8N, label: "n8n", color: "var(--brand-n8n)" },
+  vite: { icon: SiVite, label: "Vite", color: "var(--brand-vite)" },
+  go: { icon: SiGo, label: "Go", color: "var(--brand-go)" },
   elastic: { icon: SiElastic, label: "Elastic", color: "var(--brand-elastic)" },
   markdown: { icon: SiMarkdown, label: "Markdown", color: "var(--brand-markdown)" },
   python: { icon: SiPython, label: "Python", color: "var(--brand-python)" },
@@ -75,6 +80,7 @@ export const techIcons: Record<string, TechIconConfig> = {
   supabase: { icon: SiSupabase, label: "Supabase", color: "var(--brand-supabase)"},
   wireshark: { icon: SiWireshark, label: "Wireshark", color: "var(--brand-wireshark)" },
   burpsuite: { icon: SiBurpsuite, label: "Burp Suite", color: "var(--brand-burpsuite)" },
+  hivemq: { icon: SiHivemq, label: "HiveMQTT", color: "var(--brand-hivemq)" },
   sql: { icon: FiDatabase, label: "SQL", color: "var(--color-accent)"},
   html: { icon: SiHtml5, label: "HTML", color: "var(--brand-html)"},
   css: { icon: SiCss, label: "CSS", color: "var(--brand-css)"},

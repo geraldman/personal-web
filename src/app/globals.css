@@ -48,6 +48,9 @@
   --brand-html: #E44D26;
   --brand-css: #663399;
   --brand-javascript: #F0DB4F;
+  --brand-vite: #646CFF;
+  --brand-go: #00ADD8;
+  --brand-hivemq: #FF7A00;
   --max-width: 1200px;
   --nav-height: 65px;
   --font-body: var(--font-geist-sans);
