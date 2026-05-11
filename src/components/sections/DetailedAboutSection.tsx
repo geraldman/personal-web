@@ -13,8 +13,8 @@ export function DetailedAboutSection() {
 				<div>
 					<SectionHeader
 						label="about"
-						title="Engineer first. Security always."
-						description=""
+						title="About Gerald"
+						description="Background, methods, and the approach behind my engineering and security work"
 					/>
 
 					<div className="space-y-5 text-sm text-[var(--color-text-secondary)] lg:text-base">
