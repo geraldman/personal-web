@@ -7,6 +7,7 @@ import { certificates } from "@/data/certificates";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
 import { CertificateData, CertificateStatus } from "@/types";
+import { useOverlayHistory } from "@/hooks/useOverlayHistory";
 
 type FilterValue = "all" | CertificateStatus;
 
@@ -23,6 +24,12 @@ export default function CertificatesPage() {
   const certificateList = certificates;
   const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
   const [activeCertificate, setActiveCertificate] = useState<CertificateData | null>(null);
+
+  const { handleCloseOverlay } = useOverlayHistory({
+    activeItem: activeCertificate,
+    setActiveItem: setActiveCertificate,
+    paramName: "certificate",
+  });
 
   const statusFilters = useMemo(
     () => ["all", ...Array.from(new Set(certificateList.map((item) => item.status)))] as FilterValue[],
@@ -103,7 +110,7 @@ export default function CertificatesPage() {
 
       <CertificateDetailsOverlay
         certificate={activeCertificate}
-        onClose={() => setActiveCertificate(null)}
+        onClose={handleCloseOverlay}
       />
     </>
   );

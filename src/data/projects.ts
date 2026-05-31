@@ -46,7 +46,7 @@ export const projects: ProjectData[] = [
     id: "bebas-qc",
     title: "Bebas QC",
     description:
-      `Bebas QC is an AI-driven quality control solution designed to replace slow, manual inspections in high-speed manufacturing environments, such as those at Reckitt Benckiser. It is used as a prototype for submission at AI Open Innovation Challenge 2026.
+      `Bebas QC is an AI-driven quality control solution designed to replace slow, manual inspections in high-speed manufacturing environments, such as those at Reckitt Benckiser. It is used as a prototype for submission at AI Open Innovation Challenge 2026. The deployment runs on Google Cloud.
 
 By utilizing  computer vision and real-time sensor data, the system monitors production lines to detect physical defects like dents or misaligned labels within milliseconds. Unlike standard cameras, it functions as a "factory brain" that performs Root Cause Analysis (RCA), cross-referencing anomalies with machine vibrations or temperatures to diagnose exactly why a failure occurred and recommending immediate corrective actions.
 
@@ -57,10 +57,11 @@ This prototype features a centralized digital dashboard that provides real-time 
 When the system identifies a performance deviation or defect, it triggers an automated response sequence. Using n8n for seamless workflow orchestration, the system instantaneously pushes critical alerts to Telegram or WhatsApp. This ensures that the right personnel receive actionable intelligence the moment an anomaly is detected, bridging the gap between data perception and manual intervention.`,
     category: "web-development",
     status: "in-progress",
-    stack: ["go", "redis", "vite", "postgres", "docker", "hivemq", "n8n", "nginx", "react", "tailwind"],
+    stack: ["go", "redis", "vite", "postgres", "googlecloud", "docker", "hivemq", "n8n", "nginx", "react", "tailwind"],
     previewImages: ["/images/bebasqc/bebasqc1.png", "/images/bebasqc/bebasqc2.png", "/images/bebasqc/bebasqc3.png", "/images/bebasqc/bebasqc4.png"],
     featured: true,
     githubUrl: "https://github.com/geraldman/bebas-qc",
+    liveUrl: "https://bebasqc.geraldmanurung.site",
   },
   // {
   //   id: "auth-attack-simulator",

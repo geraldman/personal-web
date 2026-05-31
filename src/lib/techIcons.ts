@@ -33,6 +33,7 @@ import {
   SiVite,
   SiGo,
   SiHivemq,
+  SiGooglecloud,
 } from "react-icons/si";
 
 import {
@@ -65,6 +66,7 @@ export const techIcons: Record<string, TechIconConfig> = {
   n8n: { icon: SiN8N, label: "n8n", color: "var(--brand-n8n)" },
   vite: { icon: SiVite, label: "Vite", color: "var(--brand-vite)" },
   go: { icon: SiGo, label: "Go", color: "var(--brand-go)" },
+  googlecloud: { icon: SiGooglecloud, label: "Google Cloud", color: "var(--brand-googlecloud)" },
   elastic: { icon: SiElastic, label: "Elastic", color: "var(--brand-elastic)" },
   markdown: { icon: SiMarkdown, label: "Markdown", color: "var(--brand-markdown)" },
   python: { icon: SiPython, label: "Python", color: "var(--brand-python)" },

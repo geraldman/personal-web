@@ -8,6 +8,7 @@ import { ProjectCardSkeleton } from "@/components/ui/ProjectCardSkeleton";
 import { projects } from "@/data/projects";
 import { CATEGORY_LABELS } from "@/lib/constants";
 import { ProjectCategory, ProjectData } from "@/types";
+import { useOverlayHistory } from "@/hooks/useOverlayHistory";
 
 type FilterValue = "all" | ProjectCategory;
 
@@ -22,6 +23,12 @@ export function ProjectsGrid() {
   const [shouldRenderCards, setShouldRenderCards] = useState(false);
   const [activeFilter, setActiveFilter] = useState<FilterValue>("all");
   const [activeProject, setActiveProject] = useState<ProjectData | null>(null);
+
+  const { handleCloseOverlay } = useOverlayHistory({
+    activeItem: activeProject,
+    setActiveItem: setActiveProject,
+    paramName: "project",
+  });
 
   useEffect(() => {
     if (isInView) {
@@ -97,7 +104,7 @@ export function ProjectsGrid() {
           </motion.div>
         </AnimatePresence>
 
-        <ProjectDetailsOverlay project={activeProject} onClose={() => setActiveProject(null)} />
+        <ProjectDetailsOverlay project={activeProject} onClose={handleCloseOverlay} />
 
         {filteredProjects.length === 0 ? (
           <p className="mt-8 text-center font-mono text-xs uppercase tracking-[0.14em] text-[var(--color-text-muted)]">

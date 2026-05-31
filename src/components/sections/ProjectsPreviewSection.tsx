@@ -10,12 +10,19 @@ import { ProjectDetailsOverlay } from "@/components/ui/ProjectDetailsOverlay";
 import { ProjectCardSkeleton } from "@/components/ui/ProjectCardSkeleton";
 import { projects } from "@/data/projects";
 import { ProjectData } from "@/types";
+import { useOverlayHistory } from "@/hooks/useOverlayHistory";
 
 export function ProjectsPreviewSection() {
   const cardsRef = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(cardsRef, { once: true, amount: 0.15 });
   const [shouldRenderCards, setShouldRenderCards] = useState(false);
   const [activeProject, setActiveProject] = useState<ProjectData | null>(null);
+
+  const { handleCloseOverlay } = useOverlayHistory({
+    activeItem: activeProject,
+    setActiveItem: setActiveProject,
+    paramName: "project",
+  });
 
   useEffect(() => {
     if (isInView) {
@@ -49,7 +56,7 @@ export function ProjectsPreviewSection() {
               ))}
         </div>
 
-        <ProjectDetailsOverlay project={activeProject} onClose={() => setActiveProject(null)} />
+        <ProjectDetailsOverlay project={activeProject} onClose={handleCloseOverlay} />
 
         <div className="mt-8">
           <Link

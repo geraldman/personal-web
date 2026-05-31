@@ -8,10 +8,17 @@ import { CertificateDetailsOverlay } from "@/components/ui/CertificateDetailsOve
 import { certificates } from "@/data/certificates";
 import { useState } from "react";
 import { CertificateData } from "@/types";
+import { useOverlayHistory } from "@/hooks/useOverlayHistory";
 
 export function CertificatesSection() {
   const previewCertificates = certificates.slice(0, 3);
   const [activeCertificate, setActiveCertificate] = useState<CertificateData | null>(null);
+
+  const { handleCloseOverlay } = useOverlayHistory({
+    activeItem: activeCertificate,
+    setActiveItem: setActiveCertificate,
+    paramName: "certificate",
+  });
 
   return (
     <AnimatedSection id="certificates">
@@ -47,7 +54,7 @@ export function CertificatesSection() {
 
       <CertificateDetailsOverlay
         certificate={activeCertificate}
-        onClose={() => setActiveCertificate(null)}
+        onClose={handleCloseOverlay}
       />
     </AnimatedSection>
   );
