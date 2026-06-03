@@ -56,7 +56,7 @@ This prototype features a centralized digital dashboard that provides real-time 
 
 When the system identifies a performance deviation or defect, it triggers an automated response sequence. Using n8n for seamless workflow orchestration, the system instantaneously pushes critical alerts to Telegram or WhatsApp. This ensures that the right personnel receive actionable intelligence the moment an anomaly is detected, bridging the gap between data perception and manual intervention.`,
     category: "web-development",
-    status: "in-progress",
+    status: "archived",
     stack: ["go", "redis", "vite", "postgres", "googlecloud", "docker", "hivemq", "n8n", "nginx", "react", "tailwind"],
     previewImages: ["/images/bebasqc/bebasqc1.png", "/images/bebasqc/bebasqc2.png", "/images/bebasqc/bebasqc3.png", "/images/bebasqc/bebasqc4.png"],
     featured: true,
