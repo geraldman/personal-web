@@ -57,7 +57,7 @@ export function Navbar() {
 
     const waitForBootTimeout = () =>
       new Promise<void>((resolve) => {
-        window.setTimeout(resolve, 1200);
+        window.setTimeout(resolve, 400);
       });
 
     const waitForDebugDelay = () =>
@@ -199,13 +199,14 @@ export function Navbar() {
           "relative mx-auto flex flex-col items-center justify-between border",
           isNormalPhase ? "overflow-visible" : "overflow-hidden",
           isLoadingPhase && "z-[70]",
-          "border-[var(--color-border)] bg-[var(--color-surface)]/80",
+          "border-[var(--color-border)]",
+          isNormalPhase ? "bg-[var(--color-surface)]/80" : "bg-[var(--color-surface)]",
           "transition-[box-shadow,backdrop-filter] duration-300 ease-[cubic-bezier(0.25,0.46,0.45,0.94)]",
           isLoadingPhase
             ? "shadow-[0_4px_14px_0_rgba(0,0,0,0.2)]"
             : isIntroPhase
-            ? "shadow-[0_4px_14px_0_rgba(0,0,0,0.2)] backdrop-blur-md"
-            : "shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-2xl backdrop-saturate-150",
+              ? "shadow-[0_4px_14px_0_rgba(0,0,0,0.2)] backdrop-blur-md"
+              : "shadow-[0_8px_32px_0_rgba(0,0,0,0.3)] backdrop-blur-2xl backdrop-saturate-150",
         )}
       >
         <AnimatePresence>
@@ -245,8 +246,8 @@ export function Navbar() {
             className="flex items-center"
           >
             <Link href="/" className="inline-flex items-center" aria-label="Go to home">
-            <Image src="/assets/logo.png" alt="Gerald" width={40} height={40} priority
-            className="ml-2" />
+              <Image src="/assets/logo.png" alt="Gerald" width={40} height={40} priority
+                className="ml-2" />
             </Link>
           </motion.div>
 

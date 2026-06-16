@@ -206,6 +206,27 @@
   .marquee-item {
     flex: 0 0 auto;
   }
+
+  /* Hero entrance animations */
+  .animate-hero-fade-in-up {
+    animation: hero-fade-in-up 0.65s cubic-bezier(0, 0, 0.2, 1) both;
+  }
+
+  .animation-delay-120 {
+    animation-delay: 120ms;
+  }
+
+  .animation-delay-240 {
+    animation-delay: 240ms;
+  }
+
+  .animation-delay-360 {
+    animation-delay: 360ms;
+  }
+
+  .animation-delay-480 {
+    animation-delay: 480ms;
+  }
 }
 
 @keyframes marquee-left {
@@ -215,5 +236,16 @@
 
   100% {
     transform: translateX(-50%);
+  }
+}
+
+@keyframes hero-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
