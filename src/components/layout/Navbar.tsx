@@ -192,7 +192,8 @@ export function Navbar() {
         }}
         style={{
           transform: "translateZ(0)",
-          willChange: "transform, opacity",
+          willChange: "width, height, border-radius, transform",
+          contain: "layout paint",
         }}
         className={cn(
           "relative mx-auto flex flex-col items-center justify-between border",

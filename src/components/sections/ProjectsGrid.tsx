@@ -87,7 +87,7 @@ export function ProjectsGrid() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6"
+            className="grid gap-4 md:grid-cols-3 lg:grid-cols-2 lg:gap-6"
           >
             {shouldRenderCards
               ? filteredProjects.map((project, index) => (
