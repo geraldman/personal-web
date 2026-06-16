@@ -122,7 +122,7 @@ export function HeroSection() {
           >
             <Button href="/#contact" variant="primary">
               Get in Touch
-              
+
             </Button>
             <Button href="/assets/cv/GeraldManurung.pdf" variant="outlined" download>
               Download CV
