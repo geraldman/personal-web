@@ -192,7 +192,7 @@ export function Navbar() {
         }}
         style={{
           transform: "translateZ(0)",
-          willChange: "width, height, border-radius, transform",
+          willChange: "transform",
           contain: "layout paint",
         }}
         className={cn(
