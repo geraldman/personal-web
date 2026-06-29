@@ -66,6 +66,40 @@ export default async function sendEmail(formData: FormData) {
     return { success: true as const };
   }
 
+  // finding the IP from the headers
+  const requestHeader = await headers();
+  const xForwardedFor = requestHeader.get("x-forwarded-for") ?? "";
+  const ip = xForwardedFor.split(",")[0]?.trim() || requestHeader.get("x-real-ip") || "unknown";
+
+  // Validate Cloudflare Turnstile token
+  const turnstileToken = formData.get("cf-turnstile-response");
+  const turnstileSecret = process.env.CLOUDFLARE_TURNSTILE_SECRET_KEY;
+
+  if (!turnstileSecret) {
+    throw new Error("Turnstile secret key is not configured.");
+  }
+
+  if (typeof turnstileToken !== "string" || !turnstileToken) {
+    throw new Error("Security verification token is missing.");
+  }
+
+  const verifyRes = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      secret: turnstileSecret,
+      response: turnstileToken,
+      remoteip: ip,
+    }),
+  });
+
+  const verifyData = await verifyRes.json();
+  if (!verifyData.success) {
+    throw new Error("Security verification failed. Please try again.");
+  }
+
   if (!name || name.length > 80) {
     throw new Error("Invalid name.");
   }
@@ -85,11 +119,6 @@ export default async function sendEmail(formData: FormData) {
   if (hasInjectionPattern(name, email, subject, message)) {
     throw new Error("Unsafe input detected.");
   }
-
-  // finding the IP from the headers
-  const requestHeader = await headers();
-  const xForwardedFor = requestHeader.get("x-forwarded-for") ?? "";
-  const ip = xForwardedFor.split(",")[0]?.trim() || requestHeader.get("x-real-ip") || "unknown";
 
   const identifier = getRateLimiterIdentity(email, ip);
   const result = await getRateLimiter().limit(identifier);

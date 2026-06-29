@@ -5,6 +5,7 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { SOCIAL_LINKS } from "@/lib/constants";
 import sendEmail from "@/lib/resend";
+import { Turnstile } from "@/components/ui/Turnstile";
 
 type ContactFormValues = {
   name: string;
@@ -39,6 +40,7 @@ export function ContactSection() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -110,6 +112,14 @@ export function ContactSection() {
       return;
     }
 
+    if (!turnstileToken) {
+      setNotification({
+        type: "error",
+        message: "Please complete the security check.",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     
     try {
@@ -121,6 +131,7 @@ export function ContactSection() {
           type: "success",
           message: "Message sent! I'll get back to you soon.",
         });
+        setTurnstileToken(null);
         setValues({
           name: "",
           email: "",
@@ -278,6 +289,17 @@ export function ContactSection() {
                 onChange={handleChange}
               />
             </div>
+
+            <input type="hidden" name="cf-turnstile-response" value={turnstileToken ?? ""} />
+            <Turnstile
+              siteKey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || ""}
+              onVerify={(token) => {
+                setTurnstileToken(token);
+                setNotification({ type: null, message: "" });
+              }}
+              onExpire={() => setTurnstileToken(null)}
+              onError={() => setTurnstileToken(null)}
+            />
 
             <button
               type="submit"
