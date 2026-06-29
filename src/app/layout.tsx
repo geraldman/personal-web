@@ -47,6 +47,15 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: OWNER_NAME,
     type: "website",
+    images: [
+      {
+        url: new URL("/assets/gerald.webp", SITE_URL).toString(),
+        width: 650,
+        height: 975,
+        alt: "Gerald Manurung - Security-focused Informatics Student & Full-Stack Engineer",
+        type: "image/webp",
+      },
+    ]
   },
 };
 
@@ -60,7 +69,7 @@ export default function RootLayout({
     "@type": "Person",
     name: "Gerald Manurung",
     url: SITE_URL,
-    image: new URL("/gerald.webp", SITE_URL).toString(),
+    image: new URL("/assets/gerald.webp", SITE_URL).toString(),
     jobTitle: "Security-focused Informatics Student & Full-Stack Engineer.",
     sameAs: SOCIAL_LINKS.map((link) => link.href),
   });
