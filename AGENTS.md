@@ -23,7 +23,7 @@
   },
 
   "typography": {
-    "installation": "Install Geist fonts via npm: 'npm i geist'. Do NOT use next/font/google or any CDN for Geist. Import directly from the 'geist' package.",
+    "installation": "Install Geist fonts via npm: 'npm i geist'. Optional use for next/font/google, but not for any libraries or any CDN for Geist. Import directly from the 'geist' package.",
     "primary_font": "Geist Sans",
     "mono_font": "Geist Mono",
     "import_pattern": {
@@ -37,7 +37,6 @@
       "Geist Mono": "Navigation links, badge/tag labels, code blocks, captions, metadata (dates, categories), section prefix labels (e.g. '// section-name'), terminal-style UI elements, filter tab labels."
     },
     "forbidden": [
-      "Never import Geist from next/font/google.",
       "Never use Inter, Roboto, system-ui, Arial, or any other font family.",
       "Never hardcode font-family strings in component files — always use CSS variables."
     ]
