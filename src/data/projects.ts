@@ -11,7 +11,7 @@ export const projects: ProjectData[] = [
     status: "live",
     stack: ["react", "typescript", "nextjs", "firebase", "vercel", "tailwind"],
     previewImages: ["/images/whispxr/whispxr1.png", "/images/whispxr/whispxr2.png", "/images/whispxr/whispxr3.png", "/images/whispxr/whispxr4.png"],
-    previewVideo: "/assets/videos/secure-api-gateway-preview.mp4",
+    // previewVideo: "/assets/videos/secure-api-gateway-preview.mp4",
     featured: true,
     githubUrl: "https://github.com/geraldman/whispxr",
     liveUrl: "https://whispxr.vercel.app",

@@ -42,5 +42,7 @@ next-env.d.ts
 
 # other
 /src/content/blog/signed-url-replay.md
+/src/content/blog/digital-forensic-writeup.md
 
 .vercel
+
