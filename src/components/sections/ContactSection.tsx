@@ -5,7 +5,7 @@ import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { SectionHeader } from "@/components/shared/SectionHeader";
 import { SOCIAL_LINKS } from "@/lib/constants";
 import sendEmail from "@/lib/resend";
-import { Turnstile } from "@/components/ui/Turnstile";
+import { ContactVerificationModal } from "@/components/ui/ContactVerificationModal";
 
 type ContactFormValues = {
   name: string;
@@ -40,7 +40,7 @@ export function ContactSection() {
     message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [isVerificationOpen, setIsVerificationOpen] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
@@ -102,9 +102,9 @@ export function ContactSection() {
     }
   }, [notification.type]);
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    
+
     const nextErrors = validate(values);
     setErrors(nextErrors);
 
@@ -112,26 +112,29 @@ export function ContactSection() {
       return;
     }
 
-    if (!turnstileToken) {
-      setNotification({
-        type: "error",
-        message: "Please complete the security check.",
-      });
-      return;
-    }
+    setIsVerificationOpen(true);
+  };
 
+  const handleVerifiedSend = async (turnstileToken: string) => {
     setIsSubmitting(true);
-    
+
     try {
-      const formData = new FormData(event.currentTarget);
+      const formData = new FormData();
+      formData.set("name", values.name);
+      formData.set("email", values.email);
+      formData.set("subject", values.subject);
+      formData.set("message", values.message);
+      formData.set("website", values.website);
+      formData.set("cf-turnstile-response", turnstileToken);
+
       const response = await sendEmail(formData);
-      
+
       if (response?.success) {
+        setIsVerificationOpen(false);
         setNotification({
           type: "success",
           message: "Message sent! I'll get back to you soon.",
         });
-        setTurnstileToken(null);
         setValues({
           name: "",
           email: "",
@@ -140,12 +143,6 @@ export function ContactSection() {
           website: "",
         });
       }
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to send message. Please try again.";
-      setNotification({
-        type: "error",
-        message,
-      });
     } finally {
       setIsSubmitting(false);
     }
@@ -290,17 +287,6 @@ export function ContactSection() {
               />
             </div>
 
-            <input type="hidden" name="cf-turnstile-response" value={turnstileToken ?? ""} />
-            <Turnstile
-              siteKey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || ""}
-              onVerify={(token) => {
-                setTurnstileToken(token);
-                setNotification({ type: null, message: "" });
-              }}
-              onExpire={() => setTurnstileToken(null)}
-              onError={() => setTurnstileToken(null)}
-            />
-
             <button
               type="submit"
               disabled={isSubmitting}
@@ -331,6 +317,13 @@ export function ContactSection() {
           </ul>
         </aside>
       </div>
+
+      <ContactVerificationModal
+        open={isVerificationOpen}
+        siteKey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY || ""}
+        onClose={() => setIsVerificationOpen(false)}
+        onConfirm={handleVerifiedSend}
+      />
     </AnimatedSection>
   );
 }
