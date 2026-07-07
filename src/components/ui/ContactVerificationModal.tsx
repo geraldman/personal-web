@@ -137,8 +137,8 @@ export function ContactVerificationModal({
               </button>
             </div>
 
-            <div className="px-5 py-5">
-              <p className="mb-4 text-sm text-[var(--color-text-secondary)]">
+            <div className="px-5 py-5 justify-items-center">
+              <p className="mb-4 text-sm text-[var(--color-text-secondary)] text-center">
                 {status === "verified"
                   ? "You're verified. Send your message when you're ready."
                   : "Confirm you're human before your message is sent."}
