@@ -1,4 +1,6 @@
-import Link from "next/link";
+"use client";
+
+import Link, { useLinkStatus } from "next/link";
 import { cn } from "@/lib/utils";
 
 type ButtonVariant = "primary" | "outlined" | "ghost";
@@ -11,6 +13,22 @@ interface ButtonProps {
   size?: ButtonSize;
   className?: string;
   download?: boolean | string;
+}
+
+function ButtonLabel({ children }: { children: React.ReactNode }) {
+  const { pending } = useLinkStatus();
+
+  if (pending) {
+    return (
+      <span
+        className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"
+        role="status"
+        aria-label="Loading"
+      />
+    );
+  }
+
+  return <>{children}</>;
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
@@ -56,7 +74,7 @@ export function Button({
       href={href}
       className={classes}
     >
-      {children}
+      <ButtonLabel>{children}</ButtonLabel>
     </Link>
   );
 }

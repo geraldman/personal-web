@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { Button } from "@/components/ui/Button";
 import { CertificateCard } from "@/components/ui/CertificateCard";
 import { CertificateDetailsOverlay } from "@/components/ui/CertificateDetailsOverlay";
 import { certificates } from "@/data/certificates";
@@ -39,16 +39,13 @@ export function CertificatesSection() {
           ))}
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-4">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4">
           <p className="text-sm text-[var(--color-text-secondary)]">
             The full certificates index will include issuers, verification links, and skill mapping.
           </p>
-          <Link
-            href="/certificates"
-            className="inline-flex min-h-[44px] items-center rounded-full border border-[var(--color-border)] px-4 font-mono text-xs uppercase tracking-[0.15em] text-[var(--color-text-secondary)] transition-colors duration-150 hover:border-[var(--color-border-hover)] hover:text-[var(--color-accent)]"
-          >
-            Open Certificates
-          </Link>
+          <Button href="/certificates" variant="primary">
+            View All Certificates
+          </Button>
         </div>
       </div>
 

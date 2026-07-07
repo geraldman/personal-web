@@ -1,11 +1,24 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { ExperienceDetailsOverlay } from "@/components/ui/ExperienceDetailsOverlay";
 import { timelineItems } from "@/data/experiences";
+import { TimelineItem } from "@/types";
+import { useOverlayHistory } from "@/hooks/useOverlayHistory";
 
 export function DetailedAboutSection() {
 
     const timelineItem = timelineItems;
+    const [activeExperience, setActiveExperience] = useState<TimelineItem | null>(null);
+
+    const { handleCloseOverlay } = useOverlayHistory({
+        activeItem: activeExperience,
+        setActiveItem: setActiveExperience,
+        paramName: "experience",
+    });
 
 	return (
 		<AnimatedSection id="detailed-about" className="bg-[var(--color-bg-secondary)]">
@@ -14,7 +27,6 @@ export function DetailedAboutSection() {
 					<SectionHeader
 						label="about"
 						title="About Gerald"
-						description="Background, methods, and the approach behind my engineering and security work"
 					/>
 
 					<div className="space-y-5 text-sm text-[var(--color-text-secondary)] lg:text-base">
@@ -74,29 +86,41 @@ export function DetailedAboutSection() {
 						/>
 						<div className="space-y-8 lg:grid lg:grid-cols-4 lg:gap-6 lg:space-y-0">
 							{timelineItem.map((item) => (
-								<div key={item.id} className="relative pl-10 lg:pl-0 lg:pt-12">
+								<div key={item.id} className="relative pl-10 lg:flex lg:h-full lg:flex-col lg:pl-0 lg:pt-12">
 									<span
-										className="absolute left-[6px] top-1.5 h-3 w-3 rounded-full border border-[var(--color-border-hover)] bg-[var(--color-accent)] lg:left-1/2 lg:top-0 lg:-translate-x-1/2"
+										className="absolute left-[6px] top-1.5 h-3 w-3 rounded-full border border-[var(--color-border-hover)] bg-[var(--color-accent)] lg:left-1/2 lg:top-6 lg:-translate-x-1/2 lg:-translate-y-1/2"
 										aria-hidden="true"
 									/>
-									<div className="rounded-2xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-4">
-										<p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-text-muted)]">
-											{item.period}
-										</p>
-										<h4 className="mt-2 text-base font-semibold text-[var(--color-text-primary)]">
-											{item.title}
-										</h4>
-										<p className="mt-1 text-sm text-[var(--color-text-secondary)]">
-											{item.org}
-										</p>
-										<ul className="mt-3 space-y-2 text-sm text-[var(--color-text-secondary)]">
-											{item.highlights.map((highlight, index) => (
-												<li key={`${item.id}-${index}`} className="flex gap-2">
-													<span className="mt-2 h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
-													<span>{highlight}</span>
-												</li>
-											))}
-										</ul>
+									<div className="glass flex flex-1 flex-col rounded-2xl p-4 transition-transform duration-200 hover:scale-[1.02] hover:border-[var(--color-border-hover)]">
+										<button
+											type="button"
+											onClick={() => setActiveExperience(item)}
+											className="flex w-full flex-1 flex-col rounded-xl text-left outline-none focus:outline-none focus-visible:outline-none"
+											aria-label={`View details for ${item.title}`}
+										>
+											<p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--color-text-muted)]">
+												{item.period}
+											</p>
+											<h3 className="mt-2 text-lg font-semibold text-[var(--color-text-primary)]">
+												{item.title}
+											</h3>
+											<p className="mt-1 truncate text-sm text-[var(--color-text-secondary)]">
+												{item.org}
+											</p>
+											<ul className="mt-3 space-y-2 text-sm text-[var(--color-text-secondary)]">
+												{item.highlights.slice(0, 2).map((highlight, index) => (
+													<li key={`${item.id}-${index}`} className="flex gap-2">
+														<span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
+														<span className="line-clamp-2">{highlight}</span>
+													</li>
+												))}
+											</ul>
+											{item.highlights.length > 2 ? (
+												<p className="mt-3 font-mono text-xs uppercase tracking-[0.12em] text-[var(--color-text-muted)]">
+													+{item.highlights.length - 2} more
+												</p>
+											) : null}
+										</button>
 									</div>
 								</div>
 							))}
@@ -104,6 +128,8 @@ export function DetailedAboutSection() {
 					</div>
 				</div>
 			</div>
+
+			<ExperienceDetailsOverlay experience={activeExperience} onClose={handleCloseOverlay} />
 		</AnimatedSection>
 	);
 }

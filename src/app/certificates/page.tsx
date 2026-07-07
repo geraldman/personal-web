@@ -6,18 +6,15 @@ import { CertificateDetailsOverlay } from "@/components/ui/CertificateDetailsOve
 import { certificates } from "@/data/certificates";
 import { AnimatePresence, motion } from "framer-motion";
 import { useMemo, useState } from "react";
-import { CertificateData, CertificateStatus } from "@/types";
+import { CertificateCategory, CertificateData } from "@/types";
 import { useOverlayHistory } from "@/hooks/useOverlayHistory";
 
-type FilterValue = "all" | CertificateStatus;
+type FilterValue = "all" | CertificateCategory;
 
-const STATUS_LABELS: Record<CertificateStatus, string> = {
+const CATEGORY_LABELS: Record<CertificateCategory, string> = {
   web: "Web Development",
   security: "Security",
   community: "Community and Leadership",
-  "in-progress": "In Progress",
-  completed: "Completed",
-  planned: "Planned",
 };
 
 export default function CertificatesPage() {
@@ -31,8 +28,8 @@ export default function CertificatesPage() {
     paramName: "certificate",
   });
 
-  const statusFilters = useMemo(
-    () => ["all", ...Array.from(new Set(certificateList.map((item) => item.status)))] as FilterValue[],
+  const categoryFilters = useMemo(
+    () => ["all", ...Array.from(new Set(certificateList.map((item) => item.category)))] as FilterValue[],
     [certificateList],
   );
 
@@ -41,29 +38,29 @@ export default function CertificatesPage() {
       return certificateList;
     }
 
-    return certificateList.filter((item) => item.status === activeFilter);
+    return certificateList.filter((item) => item.category === activeFilter);
   }, [activeFilter, certificateList]);
   return (
     <>
       <PageHeader
         label="certificates"
         title="Certificates"
-        description="This page is intentionally kept as a shell and will be populated with verifiable credentials."
+        description="Verifiable credentials across web development, security, and community leadership, filterable by category."
       />
       <section className="section-padding pt-0">
         <div className="container-width">
           <div className="mb-6 overflow-x-auto">
             <div className="flex min-w-max gap-2">
-              {statusFilters.map((status) => {
-                const active = activeFilter === status;
-                const label = status === "all" ? "All" : STATUS_LABELS[status];
+              {categoryFilters.map((category) => {
+                const active = activeFilter === category;
+                const label = category === "all" ? "All" : CATEGORY_LABELS[category];
 
                 return (
                   <button
-                    key={status}
+                    key={category}
                     type="button"
                     className="relative min-h-[44px] rounded-full border border-[var(--color-border)] px-4 font-mono text-xs uppercase tracking-[0.14em] text-[var(--color-text-secondary)]"
-                    onClick={() => setActiveFilter(status)}
+                    onClick={() => setActiveFilter(category)}
                   >
                     {active ? (
                       <motion.span

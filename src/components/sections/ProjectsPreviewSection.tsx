@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { SectionHeader } from "@/components/shared/SectionHeader";
+import { Button } from "@/components/ui/Button";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { ProjectDetailsOverlay } from "@/components/ui/ProjectDetailsOverlay";
 import { ProjectCardSkeleton } from "@/components/ui/ProjectCardSkeleton";
@@ -59,12 +59,9 @@ export function ProjectsPreviewSection() {
         <ProjectDetailsOverlay project={activeProject} onClose={handleCloseOverlay} />
 
         <div className="mt-8">
-          <Link
-            href="/projects"
-            className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-text-secondary)] transition-colors duration-150 hover:text-[var(--color-accent)]"
-          >
-            View all projects
-          </Link>
+          <Button href="/projects" variant="primary">
+            View All Projects
+          </Button>
         </div>
       </div>
     </AnimatedSection>

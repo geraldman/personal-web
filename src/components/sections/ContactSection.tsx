@@ -1,11 +1,25 @@
 "use client";
 
 import { ChangeEvent, FormEvent, useState, useEffect } from "react";
+import { FiExternalLink, FiGithub, FiLinkedin, FiMail } from "react-icons/fi";
+import { IconType } from "react-icons";
 import { AnimatedSection } from "@/components/shared/AnimatedSection";
 import { SectionHeader } from "@/components/shared/SectionHeader";
-import { SOCIAL_LINKS } from "@/lib/constants";
+import { SOCIAL_LINKS, STATIC_STATS } from "@/lib/constants";
 import sendEmail from "@/lib/resend";
 import { ContactVerificationModal } from "@/components/ui/ContactVerificationModal";
+
+const SOCIAL_ICONS: Record<string, IconType> = {
+  GitHub: FiGithub,
+  LinkedIn: FiLinkedin,
+  Email: FiMail,
+};
+
+const SOCIAL_DESCRIPTIONS: Record<string, string> = {
+  GitHub: "Code & open-source work",
+  LinkedIn: "Professional network",
+  Email: "Fastest for project inquiries",
+};
 
 type ContactFormValues = {
   name: string;
@@ -297,24 +311,74 @@ export function ContactSection() {
           </form>
         </div>
 
-        <aside className="glass rounded-2xl p-6">
-          <p className="mb-4 font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-text-muted)]">
-            {"// socials"}
+        <aside className="glass flex h-full flex-col overflow-hidden rounded-2xl">
+          <div className="flex items-center gap-2 border-b border-[var(--color-border)] px-5 py-3.5 sm:px-6">
+            <span className="h-2 w-2 rounded-full bg-[var(--color-text-muted)]" />
+            <span className="h-2 w-2 rounded-full bg-[var(--color-text-muted)]" />
+            <span className="h-2 w-2 rounded-full bg-[var(--color-text-muted)]" />
+          </div>
+
+          <div className="px-5 py-5 font-mono text-sm leading-relaxed text-[var(--color-text-secondary)] sm:px-6">
+            <p className="m-0">
+              <span className="text-[var(--color-success)]">$</span> whoami --contact
+            </p>
+            <p className="m-0 flex items-center gap-2">
+              <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--color-success)]" />
+              <span className="text-[var(--color-text-primary)]">available · replies ~24h</span>
+            </p>
+            <p className="m-0">focus: currently building Assetra</p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 px-5 pb-5 sm:px-6">
+            <div>
+              <p className="m-0 font-mono text-lg uppercase tracking-[0.08em] text-[var(--color-text-primary)]">
+                {STATIC_STATS.projects}
+              </p>
+              <p className="m-0 text-sm text-[var(--color-text-secondary)]">projects</p>
+            </div>
+            <div>
+              <p className="m-0 font-mono text-lg uppercase tracking-[0.08em] text-[var(--color-text-primary)]">
+                {STATIC_STATS.years}+
+              </p>
+              <p className="m-0 text-sm text-[var(--color-text-secondary)]">years</p>
+            </div>
+          </div>
+
+          <p className="m-0 border-t border-[var(--color-border)] px-5 pb-2 pt-4 font-mono text-xs uppercase tracking-[0.22em] text-[var(--color-text-muted)] sm:px-6">
+            {"// reach me"}
           </p>
-          <ul className="space-y-3">
-            {SOCIAL_LINKS.map((link) => (
-              <li key={link.href}>
+
+          <div className="flex flex-1 flex-col">
+            {SOCIAL_LINKS.map((link) => {
+              const Icon = SOCIAL_ICONS[link.label];
+
+              return (
                 <a
+                  key={link.href}
                   href={link.href}
                   target={link.href.startsWith("http") ? "_blank" : undefined}
                   rel={link.href.startsWith("http") ? "noreferrer" : undefined}
-                  className="text-sm text-[var(--color-text-secondary)] transition-colors duration-150 hover:text-[var(--color-accent)]"
+                  className="group flex min-h-[56px] flex-1 items-center gap-4 border-t border-[var(--color-border)] px-5 py-4 transition-colors duration-150 hover:bg-[var(--color-surface-hover)] sm:px-6"
                 >
-                  {link.label}
+                  {Icon ? (
+                    <Icon size={20} className="shrink-0 text-[var(--color-text-primary)]" />
+                  ) : null}
+                  <span className="flex-1">
+                    <span className="block font-mono text-sm uppercase tracking-[0.14em] text-[var(--color-text-primary)]">
+                      {link.label}
+                    </span>
+                    <span className="block text-xs text-[var(--color-text-muted)]">
+                      {SOCIAL_DESCRIPTIONS[link.label]}
+                    </span>
+                  </span>
+                  <FiExternalLink
+                    size={18}
+                    className="shrink-0 text-[var(--color-text-muted)] transition-colors duration-150 group-hover:text-[var(--color-accent)]"
+                  />
                 </a>
-              </li>
-            ))}
-          </ul>
+              );
+            })}
+          </div>
         </aside>
       </div>
 
