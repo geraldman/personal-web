@@ -19,12 +19,15 @@ export interface ProjectData {
   writeupUrl?: string;
 }
 
-export type CertificateStatus = "web" | "security" | "community" | "completed" | "in-progress" | "planned";
+export type CertificateCategory = "web" | "security" | "community";
+
+export type CertificateStatus = "completed" | "in-progress" | "planned";
 
 export interface CertificateData {
   id: string;
   title: string;
   issuer: string;
+  category: CertificateCategory;
   status: CertificateStatus;
   summary: string;
   date: string;

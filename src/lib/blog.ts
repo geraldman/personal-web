@@ -65,7 +65,7 @@ const loadPosts = cache(async (): Promise<BlogPost[]> => {
     .map((entry) => entry.name)
     .filter((name) => name.endsWith(".md"));
 
-  const posts = await Promise.all(
+  const results = await Promise.allSettled(
     files.map(async (fileName) => {
       const slug = fileName.replace(/\.md$/, "");
       const filePath = path.join(BLOG_DIR, fileName);
@@ -80,6 +80,16 @@ const loadPosts = cache(async (): Promise<BlogPost[]> => {
       } satisfies BlogPost;
     }),
   );
+
+  const posts: BlogPost[] = [];
+
+  for (const result of results) {
+    if (result.status === "fulfilled") {
+      posts.push(result.value);
+    } else {
+      console.error("Skipping invalid blog post:", result.reason);
+    }
+  }
 
   return posts.sort((a, b) => b.date.localeCompare(a.date));
 });
