@@ -8,6 +8,7 @@ import { SectionHeader } from "@/components/shared/SectionHeader";
 import { SOCIAL_LINKS, STATIC_STATS } from "@/lib/constants";
 import sendEmail from "@/lib/resend";
 import { ContactVerificationModal } from "@/components/ui/ContactVerificationModal";
+import { Button } from "@/components/ui/Button";
 
 const SOCIAL_ICONS: Record<string, IconType> = {
   GitHub: FiGithub,
@@ -106,6 +107,8 @@ export function ContactSection() {
 
     return nextErrors;
   };
+
+  const isFormValid = Object.keys(validate(values)).length === 0;
 
   useEffect(() => {
     if (notification.type) {
@@ -301,13 +304,9 @@ export function ContactSection() {
               />
             </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex min-h-[44px] items-center justify-center rounded-full border border-[var(--color-border-hover)] bg-[var(--color-accent-dim)] px-5 py-3 font-semibold text-[var(--color-accent)] transition-colors duration-200 hover:border-[var(--color-accent)] disabled:opacity-50"
-            >
+            <Button type="submit" variant="primary" disabled={!isFormValid || isSubmitting}>
               {isSubmitting ? "Sending..." : "Send Message"}
-            </button>
+            </Button>
           </form>
         </div>
 
