@@ -163,6 +163,16 @@ export function ProjectCard({ project, eagerImage = false, onOpenDetails }: Proj
             Writeup
           </Link>
         ) : null}
+        {project.devpostUrl ? (
+          <Link
+            href={project.devpostUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="text-[var(--color-text-secondary)] transition-colors duration-150 hover:text-[var(--color-accent)]"
+          >
+            Devpost
+          </Link>
+        ) : null}
       </div>
     </article>
   );

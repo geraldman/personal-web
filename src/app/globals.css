@@ -52,6 +52,9 @@
   --brand-go: #00ADD8;
   --brand-hivemq: #FF7A00;
   --brand-googlecloud: #4285F4;
+  --brand-opensearch: #005EB8;
+  --brand-redpanda: #E2401B;
+  --brand-cloudflare: #F38020;
   --max-width: 1200px;
   --nav-height: 65px;
   --font-body: var(--font-geist-sans);

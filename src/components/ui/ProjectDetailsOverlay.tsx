@@ -301,6 +301,16 @@ export function ProjectDetailsOverlay({ project, onClose }: ProjectDetailsOverla
                         Writeup <FiExternalLink size={14} />
                       </Link>
                     ) : null}
+                    {project.devpostUrl ? (
+                      <Link
+                        href={project.devpostUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-[var(--color-border)] px-4 font-mono text-xs uppercase tracking-[0.14em] text-[var(--color-text-secondary)] transition-colors duration-150 hover:border-[var(--color-border-hover)] hover:text-[var(--color-accent)]"
+                      >
+                        Devpost <FiExternalLink size={14} />
+                      </Link>
+                    ) : null}
                   </div>
                 </>
               )}
