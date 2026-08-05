@@ -17,6 +17,7 @@ export interface ProjectData {
   githubUrl?: string;
   liveUrl?: string;
   writeupUrl?: string;
+  devpostUrl?: string;
 }
 
 export type CertificateCategory = "web" | "security" | "community";
