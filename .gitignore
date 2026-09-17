@@ -1,24 +1,26 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Root-level ignores for the monorepo.
+# Each app keeps its own .gitignore for app-specific paths (see apps/web/.gitignore).
 
 # dependencies
-/node_modules
-/.pnp
+node_modules/
+.pnp
 .pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
 
-# testing
-/coverage
+# build output
+.next/
+out/
+build/
 
-# next.js
-/.next/
-/out/
+# env files
+.env*
+!.env.example
 
-# production
-/build
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
 
 # misc
 .DS_Store
@@ -29,19 +31,3 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# other
-/src/content/blog/signed-url-replay.md
-
-.vercel
-
