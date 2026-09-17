@@ -1,0 +1,148 @@
+/*
+ * Design-token contract for apps/dashboard, ported from apps/web/src/app/globals.css
+ * (verified against the real file, not the old AGENTS.md — see design-system-audit.md).
+ *
+ * Two deliberate exclusions from the web app's globals.css, per MASTER-PLAN / WORKER-A-PLAN:
+ *
+ * 1. The ~30 `--brand-*` tech-logo color tokens are NOT ported. In the dashboard, platform
+ *    brand colors come from the `platforms.brand_color` column and are applied inline from
+ *    data. Duplicating them as CSS vars here would create a second source of truth the CMS
+ *    can't edit — the DB row is authoritative.
+ *
+ * 2. The navbar boot sequence (3-phase loading -> capsule -> normal, scroll-locking on load)
+ *    and NavbarLoader.module.css are NOT ported. The dashboard is an authenticated app shell,
+ *    not a marketing landing page — a scroll-locking boot animation on every admin page load
+ *    is wrong here. If you're "fixing" the dashboard nav because it doesn't animate in like
+ *    the marketing site's navbar, stop: that's intentional, not a gap.
+ *
+ * Everything else below is a direct port: the full --color-* block, layout tokens, the
+ * @theme inline block, @layer base, and .glass/.glow/.text-gradient/.overlay-scrollbar.
+ *
+ * useOverlayHistory (src/hooks/useOverlayHistory.ts) is NOT ported, by orchestrator decision.
+ * (admin)/entries/[id] is a real, deep-linkable route with an editable-form's worth of unsaved
+ * state — modal-over-list buys nothing there, so the back-button-closes-modal pattern has no
+ * consumer in the admin UI. This is a deliberate omission, not an oversight: do not add the hook
+ * back in just because the web app has it. It may earn its place in Phase 5 (the public view) —
+ * a recruiter clicking a solved entry could reasonably get an overlay instead of a page
+ * navigation — but that's an open call for Phase 5 to make, not something to pre-port now.
+ */
+
+@import "tailwindcss";
+
+:root {
+  --color-bg: #050508;
+  --color-bg-secondary: #0a0a10;
+  --color-surface: #0d0d14;
+  --color-surface-hover: #12121c;
+  --color-border: rgba(255, 255, 255, 0.14);
+  --color-border-hover: rgba(255, 255, 255, 0.34);
+  --color-accent: #f2f2ee;
+  --color-accent-secondary: #ffffff;
+  --color-accent-dark: #9c9c95;
+  --color-accent-dim: rgba(255, 255, 255, 0.12);
+  --color-accent-glow: rgba(255, 255, 255, 0.28);
+  --color-text-primary: #f5f5f2;
+  --color-text-secondary: #b2b2ac;
+  --color-text-muted: #6f6f6a;
+  --color-success: #00e5a0;
+  --color-warning: #f0b429;
+  --color-danger: #ff4d6a;
+
+  --max-width: 1200px;
+  --nav-height: 65px;
+
+  /* Fonts wired exactly as apps/web/src/app/layout.tsx does it: next/font/google,
+     Geist + Geist_Mono, variable + preload:false, indirected through --font-body/--font-code. */
+  --font-body: var(--font-geist-sans);
+  --font-code: var(--font-geist-mono);
+}
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-code);
+  --breakpoint-xs: 480px;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    min-height: 100%;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-text-primary);
+    font-family: var(--font-body), sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  ::selection {
+    background: var(--color-accent-dim);
+    color: var(--color-text-primary);
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(13, 13, 20, 0.75);
+    border: 1px solid var(--color-border);
+    backdrop-filter: blur(14px);
+  }
+
+  .glow {
+    box-shadow: 0 0 28px var(--color-accent-glow);
+  }
+
+  .text-gradient {
+    background: linear-gradient(112deg, var(--color-accent) 0%, var(--color-accent-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .overlay-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-hover) transparent;
+  }
+  .overlay-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+  .overlay-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .overlay-scrollbar::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: var(--color-border-hover);
+    background-clip: content-box;
+  }
+  .overlay-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--color-accent-dim);
+    background-clip: content-box;
+  }
+}
+
+/*
+ * Not ported, and not needed here: .section-padding, .container-width (dashboard layout is a
+ * sidebar app shell, not stacked marketing sections), .marquee* (no tech marquee in the admin
+ * UI), .animate-hero-fade-in-up / .animation-delay-* (no hero). If a future dashboard screen
+ * turns out to need any of these, port them deliberately with the same reasoning documented
+ * as the two exclusions above, not by copy-pasting the whole web globals.css wholesale.
+ */
