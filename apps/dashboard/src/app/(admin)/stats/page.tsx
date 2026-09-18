@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
-import { getKind, getKinds, chartsForKind } from "@/lib/kinds";
+import { createClient, getAuthedUser } from "@/lib/supabase/server";
+import { getKinds, chartsForKind } from "@/lib/kinds";
 import { StatTile } from "@/components/shared/StatTile";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { ActivityChart } from "@/components/stats/ActivityChart";
@@ -25,16 +25,18 @@ export default async function StatsPage({ searchParams }: PageProps) {
   const { kind: kindParam } = await searchParams;
 
   const supabase = await createClient();
+  // Deduped with the (admin) layout's own getAuthedUser() call -- one auth round trip, not two.
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await getAuthedUser();
 
   if (!user) redirect("/auth/login");
 
   // With no ?kind= the page opens on the first kind by sort_order rather than a slug named here,
-  // so reordering or reseeding kinds never needs a frontend edit.
+  // so reordering or reseeding kinds never needs a frontend edit. Derived from the same getKinds()
+  // the layout already fetched, rather than a second getKind(slug) query.
   const allKinds = await getKinds();
-  const kind = kindParam ? await getKind(kindParam) : (allKinds[0] ?? null);
+  const kind = kindParam ? (allKinds.find((k) => k.slug === kindParam) ?? null) : (allKinds[0] ?? null);
   if (!kind) notFound();
 
   const charts = chartsForKind(kind.capabilities);

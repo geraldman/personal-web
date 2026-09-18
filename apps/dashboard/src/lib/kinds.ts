@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 import type { Capability, FieldDef, RecordKind } from "@/lib/types";
 
@@ -28,7 +29,11 @@ function toKind(row: KindRow): RecordKind {
   };
 }
 
-export async function getKinds(): Promise<RecordKind[]> {
+// cache() dedupes identical calls within one render pass -- the (admin) layout and the page
+// nested inside it both need the kind list, and this makes that one query instead of two. It
+// only dedupes within a single request; it does nothing across the proxy/middleware boundary,
+// which runs in a separate context.
+export const getKinds = cache(async (): Promise<RecordKind[]> => {
   const supabase = await createClient();
   const { data } = await supabase
     .from("record_kinds")
@@ -36,14 +41,18 @@ export async function getKinds(): Promise<RecordKind[]> {
     .order("sort_order", { ascending: true });
 
   return (data ?? []).map((row) => toKind(row as KindRow));
-}
+});
 
-export async function getKind(slug: string): Promise<RecordKind | null> {
+// Prefer deriving a kind from an already-fetched getKinds() result (kinds.find(k => k.slug ===
+// slug)) when one is already in scope -- e.g. every page nested under the (admin) layout, which
+// already paid for getKinds() to build the sidebar. This is for the rarer case where nothing
+// else on the request needs the full list.
+export const getKind = cache(async (slug: string): Promise<RecordKind | null> => {
   const supabase = await createClient();
   const { data } = await supabase.from("record_kinds").select("*").eq("slug", slug).maybeSingle();
 
   return data ? toKind(data as KindRow) : null;
-}
+});
 
 /** Charts are derived from capabilities, never configured per kind (decision 10). A new kind gets
  *  sensible charts the moment a capability is switched on. */

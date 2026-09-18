@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getKind } from "@/lib/kinds";
+import { getKinds } from "@/lib/kinds";
 import { RecordForm } from "@/components/records/RecordForm";
 
 interface PageProps {
@@ -12,14 +12,16 @@ export default async function NewRecordPage({ params, searchParams }: PageProps)
   const { kind: kindSlug } = await params;
   const { parent } = await searchParams;
 
-  const kind = await getKind(kindSlug);
-  if (!kind) notFound();
-
   const supabase = await createClient();
-  const [{ data: platforms }, { data: tags }] = await Promise.all([
+  // Deduped with the (admin) layout's getKinds() call -- kind lookup, platforms and tags all run
+  // in parallel instead of the kind check blocking the other two.
+  const [kinds, { data: platforms }, { data: tags }] = await Promise.all([
+    getKinds(),
     supabase.from("platforms").select("id, name").order("sort_order"),
     supabase.from("tag_usage").select("tag").limit(50),
   ]);
+  const kind = kinds.find((k) => k.slug === kindSlug) ?? null;
+  if (!kind) notFound();
 
   return (
     <div className="flex flex-col gap-4">

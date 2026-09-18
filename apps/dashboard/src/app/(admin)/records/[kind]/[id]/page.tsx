@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getKind, getKinds } from "@/lib/kinds";
+import { getKinds } from "@/lib/kinds";
 import { RecordForm } from "@/components/records/RecordForm";
 import { childKindSlugs, humanizeStatus, type RecordData } from "@/lib/types";
 
@@ -15,10 +15,9 @@ interface PageProps {
 export default async function RecordDetailPage({ params }: PageProps) {
   const { kind: kindSlug, id } = await params;
 
-  const kind = await getKind(kindSlug);
-  if (!kind) notFound();
-
   const supabase = await createClient();
+  // Deduped with the (admin) layout's getKinds() call -- the single getKind(kindSlug) round trip
+  // this page used to make on top of allKinds is gone; kind is derived from the same list.
   const [{ data: record }, { data: platforms }, { data: tags }, allKinds] = await Promise.all([
     supabase.from("records").select("*").eq("id", id).maybeSingle(),
     supabase.from("platforms").select("id, name").order("sort_order"),
@@ -26,6 +25,8 @@ export default async function RecordDetailPage({ params }: PageProps) {
     getKinds(),
   ]);
 
+  const kind = allKinds.find((k) => k.slug === kindSlug) ?? null;
+  if (!kind) notFound();
   if (!record) notFound();
 
   const childSlugs = childKindSlugs(kind.capabilities);

@@ -1,14 +1,15 @@
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthedUser } from "@/lib/supabase/server";
 import { isOwner } from "@/lib/supabase/owner";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { getKinds } from "@/lib/kinds";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
+  // The actual auth gate -- see getAuthedUser's comment on why this is not the same call as the
+  // proxy's, and must not be removed even though it looks like a duplicate.
   const {
     data: { user },
-  } = await supabase.auth.getUser();
+  } = await getAuthedUser();
 
   if (!user || !isOwner(user)) {
     redirect("/auth/login");

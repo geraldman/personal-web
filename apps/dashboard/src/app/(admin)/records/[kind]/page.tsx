@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { getKind } from "@/lib/kinds";
+import { getKinds } from "@/lib/kinds";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { RecordsTable, type RecordRow } from "@/components/records/RecordsTable";
 import { FilterBar } from "@/components/shared/FilterBar";
@@ -26,13 +26,16 @@ export default async function RecordsListPage({ params, searchParams }: PageProp
   const { kind: kindSlug } = await params;
   const sp = await searchParams;
 
-  const kind = await getKind(kindSlug);
+  // Deduped with the (admin) layout's getKinds() call -- one query for the whole request instead
+  // of the layout's list plus a second single-row getKind(slug) here.
+  const kinds = await getKinds();
+  const kind = kinds.find((k) => k.slug === kindSlug) ?? null;
   if (!kind) notFound();
 
   const rankKind = rankKindOf(kind.capabilities);
   const supabase = await createClient();
 
-  const { data: platforms } = await supabase
+  const platformsQuery = supabase
     .from("platforms")
     .select("id, name, icon_kind, icon_ref, brand_color")
     .order("sort_order");
@@ -61,7 +64,8 @@ export default async function RecordsListPage({ params, searchParams }: PageProp
     query = query.order("completed_on", { ascending: false, nullsFirst: false });
   }
 
-  const { data: records, error } = await query;
+  // Independent of each other -- run in parallel instead of one after the other.
+  const [{ data: platforms }, { data: records, error }] = await Promise.all([platformsQuery, query]);
 
   const hasAnyFilter = Boolean(sp.q || sp.platform || sp.status || sp.rank || sp.tag);
 
