@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { TagInput } from "@/components/shared/TagInput";
+import { MarkdownEditor } from "@/components/shared/MarkdownEditor";
 import { DifficultyPicker } from "@/components/shared/DifficultyBadge";
 import { FieldInput, FIELD_CONTROL_CLASS, FIELD_LABEL_CLASS } from "./FieldInput";
 import {
@@ -105,14 +106,17 @@ export function RecordForm({
 
     startTransition(async () => {
       const result =
-        mode === "create" ? await createRecord(values) : await updateRecord(recordId!, values);
+        mode === "create"
+          ? await createRecord(values)
+          : await updateRecord(recordId!, kind.slug, values);
 
       if (!result.ok) {
         setError(result.error ?? "Something went wrong.");
         return;
       }
 
-      router.push(mode === "create" ? `/records/${result.id}` : `/records/${recordId}`);
+      // Detail route is /records/[kind]/[id] -- both branches need the kind slug, not just the id.
+      router.push(`/records/${kind.slug}/${mode === "create" ? result.id : recordId}`);
     });
   }
 
@@ -131,132 +135,137 @@ export function RecordForm({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex max-w-xl flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {error && (
-        <p className="rounded-md border border-[var(--color-danger)] p-3 text-sm text-[var(--color-danger)]">
+        <p className="max-w-xl rounded-md border border-[var(--color-danger)] p-3 text-sm text-[var(--color-danger)]">
           {error}
         </p>
       )}
 
-      <label className={FIELD_LABEL_CLASS}>
-        <span>
-          Title <span className="text-[var(--color-danger)]">*</span>
-        </span>
-        <input
-          required
-          className={FIELD_CONTROL_CLASS}
-          value={values.title}
-          onChange={(e) => update("title", e.target.value)}
-        />
-      </label>
-
-      {/* Status options come from the kind, never a hardcoded list. */}
-      <label className={FIELD_LABEL_CLASS}>
-        Status
-        <select
-          className={FIELD_CONTROL_CLASS}
-          value={values.status}
-          onChange={(e) => update("status", e.target.value)}
-        >
-          {kind.statuses.map((status) => (
-            <option key={status} value={status}>
-              {humanizeStatus(status)}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      {has(caps, "platform") && (
+      {/* Capped to a narrow reading width. field_schema and Body break out below, so a
+          markdown preview pane has room to sit side by side instead of being squeezed. */}
+      <div className="flex max-w-xl flex-col gap-4">
         <label className={FIELD_LABEL_CLASS}>
-          Platform
+          <span>
+            Title <span className="text-[var(--color-danger)]">*</span>
+          </span>
+          <input
+            required
+            className={FIELD_CONTROL_CLASS}
+            value={values.title}
+            onChange={(e) => update("title", e.target.value)}
+          />
+        </label>
+
+        {/* Status options come from the kind, never a hardcoded list. */}
+        <label className={FIELD_LABEL_CLASS}>
+          Status
           <select
             className={FIELD_CONTROL_CLASS}
-            value={values.platformId ?? ""}
-            onChange={(e) => update("platformId", e.target.value || null)}
+            value={values.status}
+            onChange={(e) => update("status", e.target.value)}
           >
-            <option value="">—</option>
-            {platforms.map((platform) => (
-              <option key={platform.id} value={platform.id}>
-                {platform.name}
+            {kind.statuses.map((status) => (
+              <option key={status} value={status}>
+                {humanizeStatus(status)}
               </option>
             ))}
           </select>
         </label>
-      )}
 
-      {/* One control, three meanings — the capability decides the label (decision 1). */}
-      {rankKind && (
-        <div className={FIELD_LABEL_CLASS}>
-          {RANK_LABELS[rankKind]}
-          <DifficultyPicker
-            rank={(values.rank ?? null) as never}
-            label={values.rankLabel ?? ""}
-            onRankChange={(rank: number | null) => update("rank", rank)}
-            onLabelChange={(label: string) => update("rankLabel", label || null)}
-          />
-        </div>
-      )}
-
-      {has(caps, "dates") && (
-        <div className="flex gap-3">
-          <label className={`${FIELD_LABEL_CLASS} flex-1`}>
-            Started
-            <input
-              type="date"
+        {has(caps, "platform") && (
+          <label className={FIELD_LABEL_CLASS}>
+            Platform
+            <select
               className={FIELD_CONTROL_CLASS}
-              value={values.startedOn ?? ""}
-              onChange={(e) => update("startedOn", e.target.value || null)}
+              value={values.platformId ?? ""}
+              onChange={(e) => update("platformId", e.target.value || null)}
+            >
+              <option value="">—</option>
+              {platforms.map((platform) => (
+                <option key={platform.id} value={platform.id}>
+                  {platform.name}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
+
+        {/* One control, three meanings — the capability decides the label (decision 1). */}
+        {rankKind && (
+          <div className={FIELD_LABEL_CLASS}>
+            {RANK_LABELS[rankKind]}
+            <DifficultyPicker
+              rank={(values.rank ?? null) as never}
+              label={values.rankLabel ?? ""}
+              onRankChange={(rank: number | null) => update("rank", rank)}
+              onLabelChange={(label: string) => update("rankLabel", label || null)}
+            />
+          </div>
+        )}
+
+        {has(caps, "dates") && (
+          <div className="flex gap-3">
+            <label className={`${FIELD_LABEL_CLASS} flex-1`}>
+              Started
+              <input
+                type="date"
+                className={FIELD_CONTROL_CLASS}
+                value={values.startedOn ?? ""}
+                onChange={(e) => update("startedOn", e.target.value || null)}
+              />
+            </label>
+            <label className={`${FIELD_LABEL_CLASS} flex-1`}>
+              Completed
+              <input
+                type="date"
+                className={FIELD_CONTROL_CLASS}
+                value={values.completedOn ?? ""}
+                onChange={(e) => update("completedOn", e.target.value || null)}
+              />
+            </label>
+          </div>
+        )}
+
+        {has(caps, "time") && (
+          <label className={FIELD_LABEL_CLASS}>
+            Minutes spent
+            <input
+              type="number"
+              min={0}
+              className={FIELD_CONTROL_CLASS}
+              value={values.minutesSpent ?? ""}
+              onChange={(e) =>
+                update("minutesSpent", e.target.value === "" ? null : Number(e.target.value))
+              }
             />
           </label>
-          <label className={`${FIELD_LABEL_CLASS} flex-1`}>
-            Completed
-            <input
-              type="date"
-              className={FIELD_CONTROL_CLASS}
-              value={values.completedOn ?? ""}
-              onChange={(e) => update("completedOn", e.target.value || null)}
-            />
-          </label>
-        </div>
-      )}
+        )}
 
-      {has(caps, "time") && (
+        {has(caps, "tags") && (
+          <div className={FIELD_LABEL_CLASS}>
+            Tags
+            <TagInput
+              tags={values.tags ?? []}
+              onChange={(tags) => update("tags", tags)}
+              suggestions={tagSuggestions}
+            />
+          </div>
+        )}
+
         <label className={FIELD_LABEL_CLASS}>
-          Minutes spent
+          Link
           <input
-            type="number"
-            min={0}
+            type="url"
             className={FIELD_CONTROL_CLASS}
-            value={values.minutesSpent ?? ""}
-            onChange={(e) =>
-              update("minutesSpent", e.target.value === "" ? null : Number(e.target.value))
-            }
+            value={values.url ?? ""}
+            onChange={(e) => update("url", e.target.value || null)}
           />
         </label>
-      )}
+      </div>
 
-      {has(caps, "tags") && (
-        <div className={FIELD_LABEL_CLASS}>
-          Tags
-          <TagInput
-            tags={values.tags ?? []}
-            onChange={(tags) => update("tags", tags)}
-            suggestions={tagSuggestions}
-          />
-        </div>
-      )}
-
-      <label className={FIELD_LABEL_CLASS}>
-        Link
-        <input
-          type="url"
-          className={FIELD_CONTROL_CLASS}
-          value={values.url ?? ""}
-          onChange={(e) => update("url", e.target.value || null)}
-        />
-      </label>
-
-      {/* Kind-specific fields, in the order the kind declares them. */}
+      {/* Kind-specific fields, in the order the kind declares them. Left unconstrained (unlike
+          the spine above) so a markdown field's preview pane has room. */}
       {kind.field_schema.map((def: FieldDef) => (
         <FieldInput
           key={def.key}
@@ -268,7 +277,21 @@ export function RecordForm({
         />
       ))}
 
-      {(has(caps, "body:markdown") || has(caps, "body:code")) && (
+      {has(caps, "body:markdown") && (
+        <div className={FIELD_LABEL_CLASS}>
+          Body
+          <span className="text-xs text-[var(--color-text-tertiary)]">
+            Public-safe. Anything private belongs in Notes.
+          </span>
+          <MarkdownEditor
+            value={values.body ?? ""}
+            onChange={(v) => update("body", v || null)}
+            disabled={isPending}
+          />
+        </div>
+      )}
+
+      {!has(caps, "body:markdown") && has(caps, "body:code") && (
         <label className={FIELD_LABEL_CLASS}>
           Body
           <span className="text-xs text-[var(--color-text-tertiary)]">
@@ -276,62 +299,65 @@ export function RecordForm({
           </span>
           <textarea
             rows={8}
-            className={FIELD_CONTROL_CLASS}
+            spellCheck={false}
+            className={`${FIELD_CONTROL_CLASS} font-[family-name:var(--font-mono)] text-xs`}
             value={values.body ?? ""}
             onChange={(e) => update("body", e.target.value || null)}
           />
         </label>
       )}
 
-      <label className={FIELD_LABEL_CLASS}>
-        <span className="flex items-center gap-2">
-          Notes
-          <span className="rounded-full border border-[var(--color-border)] px-1.5 text-[10px] uppercase tracking-wide">
-            private
+      <div className="flex max-w-xl flex-col gap-4">
+        <label className={FIELD_LABEL_CLASS}>
+          <span className="flex items-center gap-2">
+            Notes
+            <span className="rounded-full border border-[var(--color-border)] px-1.5 text-[10px] uppercase tracking-wide">
+              private
+            </span>
           </span>
-        </span>
-        <span className="text-xs text-[var(--color-text-tertiary)]">
-          Never published, never sent to the model.
-        </span>
-        <textarea
-          rows={4}
-          className={FIELD_CONTROL_CLASS}
-          value={values.notes ?? ""}
-          onChange={(e) => update("notes", e.target.value || null)}
-        />
-      </label>
-
-      {/* Only appears when the kind may publish at all. The database enforces the same gate. */}
-      {has(caps, "public") && (
-        <label className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
-          <input
-            type="checkbox"
-            checked={values.isPublic ?? false}
-            onChange={(e) => update("isPublic", e.target.checked)}
-            className="h-4 w-4 accent-[var(--color-accent)]"
+          <span className="text-xs text-[var(--color-text-tertiary)]">
+            Never published, never sent to the model.
+          </span>
+          <textarea
+            rows={4}
+            className={FIELD_CONTROL_CLASS}
+            value={values.notes ?? ""}
+            onChange={(e) => update("notes", e.target.value || null)}
           />
-          Publish to the public page
         </label>
-      )}
 
-      <div className="flex gap-3 pt-2">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md border border-[var(--color-border-strong)] px-4 py-2 text-sm text-[var(--color-text-primary)] disabled:opacity-50"
-        >
-          {isPending ? "Saving…" : mode === "create" ? `Create ${kind.name}` : "Save changes"}
-        </button>
-        {mode === "edit" && (
-          <button
-            type="button"
-            onClick={handleDelete}
-            disabled={isPending}
-            className="rounded-md border border-[var(--color-border)] px-4 py-2 text-sm text-[var(--color-text-tertiary)] hover:border-[var(--color-danger)] hover:text-[var(--color-danger)] disabled:opacity-50"
-          >
-            Delete
-          </button>
+        {/* Only appears when the kind may publish at all. The database enforces the same gate. */}
+        {has(caps, "public") && (
+          <label className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
+            <input
+              type="checkbox"
+              checked={values.isPublic ?? false}
+              onChange={(e) => update("isPublic", e.target.checked)}
+              className="h-4 w-4 accent-[var(--color-accent)]"
+            />
+            Publish to the public page
+          </label>
         )}
+
+        <div className="flex gap-3 pt-2">
+          <button
+            type="submit"
+            disabled={isPending}
+            className="rounded-md border border-[var(--color-border-strong)] px-4 py-2 text-sm text-[var(--color-text-primary)] disabled:opacity-50"
+          >
+            {isPending ? "Saving…" : mode === "create" ? `Create ${kind.name}` : "Save changes"}
+          </button>
+          {mode === "edit" && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={isPending}
+              className="rounded-md border border-[var(--color-border)] px-4 py-2 text-sm text-[var(--color-text-tertiary)] hover:border-[var(--color-danger)] hover:text-[var(--color-danger)] disabled:opacity-50"
+            >
+              Delete
+            </button>
+          )}
+        </div>
       </div>
     </form>
   );

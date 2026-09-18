@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { TagInput } from "@/components/shared/TagInput";
+import { MarkdownEditor } from "@/components/shared/MarkdownEditor";
 import { cn } from "@/lib/utils";
 import type { FieldDef } from "@/lib/types";
 
@@ -51,13 +52,23 @@ function Control({ def, value, onChange, disabled }: Omit<FieldInputProps, "erro
 
   switch (def.type) {
     case "textarea":
-    case "markdown":
       return (
         <textarea
           {...common}
-          rows={def.type === "markdown" ? 8 : 4}
+          rows={4}
           value={(value as string) ?? ""}
           onChange={(e) => onChange(e.target.value || null)}
+        />
+      );
+
+    // A preview follows from the type, not the kind (RECORD-MODEL.md §5) -- any kind that
+    // declares a markdown field gets one, with no per-kind code.
+    case "markdown":
+      return (
+        <MarkdownEditor
+          value={(value as string) ?? ""}
+          onChange={(v) => onChange(v || null)}
+          disabled={disabled}
         />
       );
 

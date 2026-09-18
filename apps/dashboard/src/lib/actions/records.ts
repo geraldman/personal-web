@@ -95,14 +95,21 @@ export async function createRecord(input: RecordFormInput): Promise<ActionResult
   return { ok: true, id: data.id };
 }
 
-export async function updateRecord(id: string, input: RecordFormInput): Promise<ActionResult> {
+// kindSlug is required because the detail route is /records/[kind]/[id] -- revalidating
+// `/records/${id}` alone matches nothing (that shape is /records/[kind], with the id parsed as
+// a kind slug) and silently no-ops.
+export async function updateRecord(
+  id: string,
+  kindSlug: string,
+  input: RecordFormInput
+): Promise<ActionResult> {
   const supabase = await requireOwnerClient();
 
   const { error } = await supabase.from("records").update(toRow(input)).eq("id", id);
   if (error) return fail(error);
 
   revalidatePath("/records");
-  revalidatePath(`/records/${id}`);
+  revalidatePath(`/records/${kindSlug}/${id}`);
   return { ok: true, id };
 }
 
@@ -138,18 +145,23 @@ export async function setRecordsStatus(ids: string[], status: string): Promise<A
 
 /** Publish toggle. Note this is only one of the two gates: the kind must also carry the `public`
  *  capability, which is enforced in public_records and cannot be overridden from here. */
-export async function setRecordPublic(id: string, isPublic: boolean): Promise<ActionResult> {
+export async function setRecordPublic(
+  id: string,
+  kindSlug: string,
+  isPublic: boolean
+): Promise<ActionResult> {
   const supabase = await requireOwnerClient();
 
   const { error } = await supabase.from("records").update({ is_public: isPublic }).eq("id", id);
   if (error) return fail(error);
 
-  revalidatePath(`/records/${id}`);
+  revalidatePath(`/records/${kindSlug}/${id}`);
   return { ok: true };
 }
 
 export async function linkRecords(
   fromId: string,
+  fromKindSlug: string,
   toId: string,
   rel: string,
   note?: string | null
@@ -162,16 +174,20 @@ export async function linkRecords(
 
   if (error) return fail(error);
 
-  revalidatePath(`/records/${fromId}`);
+  revalidatePath(`/records/${fromKindSlug}/${fromId}`);
   return { ok: true };
 }
 
-export async function unlinkRecords(linkId: string, fromId: string): Promise<ActionResult> {
+export async function unlinkRecords(
+  linkId: string,
+  fromId: string,
+  fromKindSlug: string
+): Promise<ActionResult> {
   const supabase = await requireOwnerClient();
 
   const { error } = await supabase.from("record_links").delete().eq("id", linkId);
   if (error) return fail(error);
 
-  revalidatePath(`/records/${fromId}`);
+  revalidatePath(`/records/${fromKindSlug}/${fromId}`);
   return { ok: true };
 }
