@@ -407,8 +407,15 @@ routine schema edits until you migrate old rows, which would make you avoid edit
 - `TRACKER-EXPANSION-PLAN.md` §6 (`tracker_visibility`) → replaced by the `public` capability.
 - `TRACKER-EXPANSION-PLAN.md` §7–§9 (security spine, sequencing, constraints) → still apply
   verbatim.
-- Phase 7 (sync) is unaffected: adapters write `records` with `kind = 'ctf'`, `source = 'sync'`,
-  and the dedupe index moves from `(platform_id, external_id)` to `(kind_id, external_id)`.
+- Phase 7 (sync) is unaffected in substance: adapters write `records` with `kind = 'ctf'`,
+  `source = 'sync'`, and the dedupe index becomes `(kind_id, platform_id, external_id)`.
+
+  **Carried debt, found 2026-09-18:** `functions/_shared/adapters/codewars.ts` still emits
+  pre-rename shapes (`category: "swe"`, `difficulty_rank`). It is **latent, not broken** — no
+  `sync-platform` function is deployed, so nothing calls it. Deliberately left alone rather than
+  patched now: fixing it would mean touching sync code that has not been re-specified for the
+  record model, and a half-migrated adapter is worse than an obviously stale one. Phase 7 must
+  re-specify the adapter contract against `records` before writing any adapter code.
 - Phase 8 (deploy) is unaffected and still not blocked by any of this.
 
 ## 11. Open questions
