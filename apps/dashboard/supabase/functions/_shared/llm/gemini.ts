@@ -11,6 +11,14 @@ import type {
 const MODEL = "gemini-3.5-flash-lite"
 const API_BASE = "https://generativelanguage.googleapis.com/v1beta"
 
+// Gemini routinely wraps a requested-JSON response in a ```json ... ``` markdown fence despite
+// the prompt asking for bare JSON. Confirmed against a real response, not assumed.
+function stripMarkdownFence(text: string): string {
+  const trimmed = text.trim()
+  const match = trimmed.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/)
+  return match ? match[1] : trimmed
+}
+
 interface GeminiResponse {
   candidates: { content: { parts: { text: string }[] } }[]
   usageMetadata: { promptTokenCount: number; candidatesTokenCount: number }
@@ -64,7 +72,7 @@ export class GeminiProvider implements LLMProvider {
     ].join("\n")
 
     const { text, inputTokens, outputTokens } = await this.generate(prompt)
-    const parsed = JSON.parse(text) as { summary: string; recommendations: string[] }
+    const parsed = JSON.parse(stripMarkdownFence(text)) as { summary: string; recommendations: string[] }
 
     return {
       provider: this.name,
