@@ -3,6 +3,18 @@
 **Written:** 2026-09-17 · **Supersedes the gating in:** `WORKER-A-PLAN.md`, `WORKER-B-PLAN.md`
 (everything else in those files still applies) · **Companion:** `MASTER-PLAN.md`
 
+> **Wave A′ inserted 2026-09-18, before Wave 3 and Phase 8.** The tracker's data model was
+> generalised into user-definable record kinds — see `RECORD-MODEL.md` (spec, with ten decisions
+> signed off in §1.1), `WORKER-A-RECORDS.md` and `WORKER-B-RECORDS.md` (assignments).
+> `TRACKER-EXPANSION-PLAN.md` holds the superseded seven-table design, kept as the fallback.
+>
+> Wave A′ goes **before** Phase 8 deploy and takes priority over Wave 3's Phase 7 (sync), because
+> `entries` currently has 0 rows and that window closes the moment Gerald starts logging. Phase 7
+> adapters are unaffected in substance — they write `records` with `kind = 'ctf'`.
+>
+> `difficulty_rank`, open since Wave 2, is **closed**: signed off as a shared 1–5 `rank` column
+> with a verbatim `rank_label`.
+
 Roles: **[O]** orchestrator (plans, verifies, opens gates) · **[A]** worker-a (frontend) ·
 **[B]** worker-b (backend) · **[G]** Gerald
 
@@ -174,7 +186,26 @@ Phase 9 (portfolio CMS) stays out of this plan until the tracker ships.
 
 ---
 
-## 6. Reporting protocol
+## 6. UI approach — skeleton first (added 2026-09-18, Gerald's call)
+
+Gerald intends to refactor the UI of **both** apps later. Until then, Waves 2 and 3 build
+**structure, not visual design**.
+
+- Every route, component and data path gets built for real. Styling stays at placeholder level:
+  the monochrome tokens already in `globals.css` (`var(--color-*)`, `.glass`, `.glow`), plain
+  layout, no bespoke visual work.
+- **Do not** invest in polish, custom animation, illustration or per-screen art direction — it
+  gets thrown away. This overrides "Phase 5 gets real design attention" in `WORKER-A-PLAN.md`;
+  the public view still gets correct SEO metadata, OG tags and `sitemap.ts`, because those are
+  structure, not styling.
+- Build shared components (`DataTable`, `FilterBar`, `TagInput`, `DifficultyBadge`,
+  `PlatformIcon`, `StatTile`, `EmptyState`, skeletons) as the seams the refactor will work
+  through: styling in one place, no hex literals, no color decisions scattered across screens.
+- Charts (Phase 4) still read the SQL aggregates. Use default Recharts styling with token
+  colors; do not hand-tune chart appearance yet.
+- `apps/web` is **not** in scope. Its refactor is a separate effort after the tracker works.
+
+## 7. Reporting protocol
 
 - Report to the orchestrator via message at each exit, and **immediately** on a blocker or on
   anything that would change `MASTER-PLAN.md` §4.
