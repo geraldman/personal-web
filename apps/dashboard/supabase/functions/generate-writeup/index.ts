@@ -1,10 +1,10 @@
-// Generates a public portfolio blurb for one solved entry. Always a manual, per-entry action
-// from the dashboard -- there is no cron path here.
+// Generates a public portfolio blurb for one solved ctf record. Always a manual, per-record
+// action from the dashboard -- there is no cron path here.
 //
 // Authorization is structural, not a manual check: every read and write goes through a client
 // scoped to the caller's own forwarded JWT, so RLS (auth.uid() = owner_id and is_owner()) is
-// what actually decides whether the entry is visible or writable. A non-owner's request for any
-// entry id, including someone else's, simply finds no row -- same as B1.0's public_entries
+// what actually decides whether the record is visible or writable. A non-owner's request for any
+// record id, including someone else's, simply finds no row -- same as B1.0's public_entries
 // design, structural safety instead of a policy that could be gotten wrong.
 //
 // The select list below is also the enforcement point for keeping `notes` out of the prompt:
@@ -23,53 +23,54 @@ Deno.serve(async (req) => {
     return new Response(JSON.stringify({ error: "missing Authorization header" }), { status: 401 })
   }
 
-  let entryId: string
+  let recordId: string
   try {
-    const body = (await req.json()) as { entryId?: string }
-    if (!body.entryId) throw new Error("entryId required")
-    entryId = body.entryId
+    const body = (await req.json()) as { recordId?: string }
+    if (!body.recordId) throw new Error("recordId required")
+    recordId = body.recordId
   } catch {
-    return new Response(JSON.stringify({ error: "invalid body, expected { entryId }" }), { status: 400 })
+    return new Response(JSON.stringify({ error: "invalid body, expected { recordId }" }), { status: 400 })
   }
 
   const caller = callerClient(authHeader)
 
-  const { data: entry, error: selectError } = await caller
-    .from("entries")
+  const { data: record, error: selectError } = await caller
+    .from("records")
     .select(
-      "id, challenge_name, category, difficulty, tags, problem_url, status, platforms(name)",
+      "id, title, rank_label, tags, url, status, data, platforms(name)",
     )
-    .eq("id", entryId)
+    .eq("id", recordId)
     .single()
 
-  if (selectError || !entry) {
-    return new Response(JSON.stringify({ error: "entry not found" }), { status: 404 })
+  if (selectError || !record) {
+    return new Response(JSON.stringify({ error: "record not found" }), { status: 404 })
   }
-  if (entry.status !== "solved") {
-    return new Response(JSON.stringify({ error: "entry is not solved yet" }), { status: 409 })
+  if (record.status !== "solved") {
+    return new Response(JSON.stringify({ error: "record is not solved yet" }), { status: 409 })
   }
 
-  const platformName = (entry.platforms as { name?: string } | null)?.name ?? "unknown platform"
+  const platformName = (record.platforms as { name?: string } | null)?.name ?? "unknown platform"
+  const discipline = (record.data as Record<string, unknown> | null)?.discipline
 
   const llm = await getLLMProvider()
   const result = await llm.generateWriteup({
-    challengeName: entry.challenge_name,
-    category: entry.category as "swe" | "cyber",
-    difficulty: entry.difficulty,
+    challengeName: record.title,
+    category: (discipline === "swe" ? "swe" : "cyber") as "swe" | "cyber",
+    difficulty: record.rank_label,
     platformName,
-    tags: entry.tags ?? [],
-    problemUrl: entry.problem_url,
+    tags: record.tags ?? [],
+    problemUrl: record.url,
   })
 
   const { data: updated, error: updateError } = await caller
-    .from("entries")
+    .from("records")
     .update({
-      portfolio_writeup: result.writeupText,
+      body: result.writeupText,
       writeup_model: result.modelUsed,
       writeup_generated_at: new Date().toISOString(),
     })
-    .eq("id", entryId)
-    .select("id, portfolio_writeup, writeup_model, writeup_generated_at")
+    .eq("id", recordId)
+    .select("id, body, writeup_model, writeup_generated_at")
     .single()
 
   if (updateError) {
