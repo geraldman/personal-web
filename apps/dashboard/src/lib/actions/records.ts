@@ -22,7 +22,7 @@ async function requireOwnerClient() {
     redirect("/auth/login");
   }
 
-  return supabase;
+  return { supabase, user };
 }
 
 export interface RecordFormInput {
@@ -81,7 +81,7 @@ function fail(error: { message: string }): ActionResult {
 }
 
 export async function createRecord(input: RecordFormInput): Promise<ActionResult> {
-  const supabase = await requireOwnerClient();
+  const { supabase } = await requireOwnerClient();
 
   const { data, error } = await supabase
     .from("records")
@@ -103,7 +103,7 @@ export async function updateRecord(
   kindSlug: string,
   input: RecordFormInput
 ): Promise<ActionResult> {
-  const supabase = await requireOwnerClient();
+  const { supabase } = await requireOwnerClient();
 
   const { error } = await supabase.from("records").update(toRow(input)).eq("id", id);
   if (error) return fail(error);
@@ -114,7 +114,7 @@ export async function updateRecord(
 }
 
 export async function deleteRecord(id: string): Promise<ActionResult> {
-  const supabase = await requireOwnerClient();
+  const { supabase } = await requireOwnerClient();
 
   const { error } = await supabase.from("records").delete().eq("id", id);
   if (error) return fail(error);
@@ -124,7 +124,7 @@ export async function deleteRecord(id: string): Promise<ActionResult> {
 }
 
 export async function deleteRecords(ids: string[]): Promise<ActionResult> {
-  const supabase = await requireOwnerClient();
+  const { supabase } = await requireOwnerClient();
 
   const { error } = await supabase.from("records").delete().in("id", ids);
   if (error) return fail(error);
@@ -134,7 +134,7 @@ export async function deleteRecords(ids: string[]): Promise<ActionResult> {
 }
 
 export async function setRecordsStatus(ids: string[], status: string): Promise<ActionResult> {
-  const supabase = await requireOwnerClient();
+  const { supabase } = await requireOwnerClient();
 
   const { error } = await supabase.from("records").update({ status }).in("id", ids);
   if (error) return fail(error);
@@ -150,7 +150,7 @@ export async function setRecordPublic(
   kindSlug: string,
   isPublic: boolean
 ): Promise<ActionResult> {
-  const supabase = await requireOwnerClient();
+  const { supabase } = await requireOwnerClient();
 
   const { error } = await supabase.from("records").update({ is_public: isPublic }).eq("id", id);
   if (error) return fail(error);
@@ -166,7 +166,7 @@ export async function linkRecords(
   rel: string,
   note?: string | null
 ): Promise<ActionResult> {
-  const supabase = await requireOwnerClient();
+  const { supabase } = await requireOwnerClient();
 
   const { error } = await supabase
     .from("record_links")
@@ -183,11 +183,47 @@ export async function unlinkRecords(
   fromId: string,
   fromKindSlug: string
 ): Promise<ActionResult> {
-  const supabase = await requireOwnerClient();
+  const { supabase } = await requireOwnerClient();
 
   const { error } = await supabase.from("record_links").delete().eq("id", linkId);
   if (error) return fail(error);
 
   revalidatePath(`/records/${fromKindSlug}/${fromId}`);
   return { ok: true };
+}
+
+/** Facts only -- see private.review_prefill (migration 20260918140100). No prose: summary_text
+ *  and recommendations come from an existing `analyses` row if one matches the window exactly,
+ *  never generated on the fly. Consumed by any kind carrying the `prefill` capability, not just
+ *  `review` -- see RECORD-MODEL.md decision 8. */
+export interface ReviewPrefillAnalysis {
+  id: string;
+  period: string;
+  window_start: string | null;
+  window_end: string | null;
+  summary_text: string;
+  recommendations: string[];
+  generated_at: string;
+}
+
+export interface ReviewPrefill {
+  minutes_by_kind: Record<string, number>;
+  closed_records: Array<{ id: string; kind: string; title: string; completed_on: string | null }>;
+  analysis: ReviewPrefillAnalysis | null;
+}
+
+export async function getReviewPrefill(
+  windowStart: string,
+  windowEnd: string
+): Promise<{ ok: true; data: ReviewPrefill } | { ok: false; error: string }> {
+  const { supabase, user } = await requireOwnerClient();
+
+  const { data, error } = await supabase.rpc("review_prefill", {
+    owner: user.id,
+    window_start: windowStart,
+    window_end: windowEnd,
+  });
+
+  if (error) return { ok: false, error: error.message };
+  return { ok: true, data: data as unknown as ReviewPrefill };
 }

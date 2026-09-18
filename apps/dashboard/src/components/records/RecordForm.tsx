@@ -6,6 +6,7 @@ import { TagInput } from "@/components/shared/TagInput";
 import { MarkdownEditor } from "@/components/shared/MarkdownEditor";
 import { DifficultyPicker } from "@/components/shared/DifficultyBadge";
 import { FieldInput, FIELD_CONTROL_CLASS, FIELD_LABEL_CLASS } from "./FieldInput";
+import { PrefillPanel } from "./PrefillPanel";
 import {
   createRecord,
   deleteRecord,
@@ -31,6 +32,12 @@ interface PlatformOption {
   name: string;
 }
 
+// The `prefill` capability assumes these three `data` keys, same as `dates` assumes
+// started_on/completed_on and `time` assumes minutes_spent (RECORD-MODEL.md §9, A'.11). They get
+// pulled out of the generic field_schema loop and rendered by PrefillPanel instead, alongside the
+// read-only facts panel that keys off them.
+const PREFILL_FIELD_KEYS = ["period", "window_start", "window_end"];
+
 interface RecordFormProps {
   mode: "create" | "edit";
   kind: RecordKind;
@@ -53,6 +60,13 @@ export function RecordForm({
   const router = useRouter();
   const caps = kind.capabilities;
   const rankKind = rankKindOf(caps);
+  const prefillCapable = has(caps, "prefill");
+  const prefillFields = prefillCapable
+    ? kind.field_schema.filter((f) => PREFILL_FIELD_KEYS.includes(f.key))
+    : [];
+  const restFields = prefillCapable
+    ? kind.field_schema.filter((f) => !PREFILL_FIELD_KEYS.includes(f.key))
+    : kind.field_schema;
 
   const [values, setValues] = useState<RecordFormInput>({
     kindId: kind.id,
@@ -264,9 +278,21 @@ export function RecordForm({
         </label>
       </div>
 
+      {/* Read-only facts beside the form, never written into the kind's own fields -- see
+          PrefillPanel. Facts only; Gerald writes planned/done/adjustments himself. */}
+      {prefillCapable && prefillFields.length > 0 && (
+        <PrefillPanel
+          fields={prefillFields}
+          data={values.data ?? {}}
+          onFieldChange={updateData}
+          disabled={isPending}
+          fieldErrors={fieldErrors}
+        />
+      )}
+
       {/* Kind-specific fields, in the order the kind declares them. Left unconstrained (unlike
           the spine above) so a markdown field's preview pane has room. */}
-      {kind.field_schema.map((def: FieldDef) => (
+      {restFields.map((def: FieldDef) => (
         <FieldInput
           key={def.key}
           def={def}

@@ -5,8 +5,11 @@ import { getKinds } from "@/lib/kinds";
 import { RecordForm } from "@/components/records/RecordForm";
 import { childKindSlugs, humanizeStatus, type RecordData } from "@/lib/types";
 
-// Detail + edit. The child lists below come from `children:<slug>` capabilities, so LFS gets its
-// build → checkpoint → issue hierarchy without this file knowing what LFS is.
+// Detail + edit. The child lists below come from `children:<slug>` capabilities -- a kind that
+// declares e.g. `children:issue` grows an inline list of its issue-kind children plus an "add"
+// button, with nothing here naming that kind. No shipped kind currently declares `children:`
+// (the LFS build/checkpoint/issue hierarchy that used to is gone), so this section renders
+// nothing today; it activates the moment a kind declares one again.
 
 interface PageProps {
   params: Promise<{ kind: string; id: string }>;
