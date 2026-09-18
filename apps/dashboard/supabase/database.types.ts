@@ -591,11 +591,23 @@ export type Database = {
         }
         Relationships: []
       }
+      time_rollup: {
+        Row: {
+          kind: string | null
+          minutes: number | null
+          occurred_on: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       compute_stats_snapshot: { Args: { owner: string }; Returns: Json }
       is_owner: { Args: never; Returns: boolean }
       owner_id: { Args: never; Returns: string }
+      review_prefill: {
+        Args: { owner: string; window_end: string; window_start: string }
+        Returns: Json
+      }
       stats_activity: {
         Args: {
           bucket: string
