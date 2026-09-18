@@ -65,83 +65,6 @@ export type Database = {
         }
         Relationships: []
       }
-      entries: {
-        Row: {
-          category: string
-          challenge_name: string
-          created_at: string
-          date_completed: string | null
-          difficulty: string | null
-          difficulty_rank: number | null
-          external_id: string | null
-          id: string
-          notes: string | null
-          owner_id: string
-          platform_id: string
-          portfolio_writeup: string | null
-          problem_url: string | null
-          source: string
-          status: string
-          synced_at: string | null
-          tags: string[]
-          updated_at: string
-          writeup_generated_at: string | null
-          writeup_model: string | null
-        }
-        Insert: {
-          category: string
-          challenge_name: string
-          created_at?: string
-          date_completed?: string | null
-          difficulty?: string | null
-          difficulty_rank?: number | null
-          external_id?: string | null
-          id?: string
-          notes?: string | null
-          owner_id?: string
-          platform_id: string
-          portfolio_writeup?: string | null
-          problem_url?: string | null
-          source?: string
-          status?: string
-          synced_at?: string | null
-          tags?: string[]
-          updated_at?: string
-          writeup_generated_at?: string | null
-          writeup_model?: string | null
-        }
-        Update: {
-          category?: string
-          challenge_name?: string
-          created_at?: string
-          date_completed?: string | null
-          difficulty?: string | null
-          difficulty_rank?: number | null
-          external_id?: string | null
-          id?: string
-          notes?: string | null
-          owner_id?: string
-          platform_id?: string
-          portfolio_writeup?: string | null
-          problem_url?: string | null
-          source?: string
-          status?: string
-          synced_at?: string | null
-          tags?: string[]
-          updated_at?: string
-          writeup_generated_at?: string | null
-          writeup_model?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "entries_platform_id_fkey"
-            columns: ["platform_id"]
-            isOneToOne: false
-            referencedRelation: "platforms"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       import_batches: {
         Row: {
           created_at: string
@@ -275,6 +198,265 @@ export type Database = {
         }
         Relationships: []
       }
+      record_kinds: {
+        Row: {
+          capabilities: string[]
+          color: string | null
+          created_at: string
+          default_status: string
+          done_statuses: string[]
+          field_schema: Json
+          icon: string | null
+          id: string
+          is_system: boolean
+          name: string
+          owner_id: string
+          plural_name: string
+          slug: string
+          sort_order: number
+          statuses: string[]
+          updated_at: string
+        }
+        Insert: {
+          capabilities?: string[]
+          color?: string | null
+          created_at?: string
+          default_status: string
+          done_statuses?: string[]
+          field_schema?: Json
+          icon?: string | null
+          id?: string
+          is_system?: boolean
+          name: string
+          owner_id?: string
+          plural_name: string
+          slug: string
+          sort_order?: number
+          statuses: string[]
+          updated_at?: string
+        }
+        Update: {
+          capabilities?: string[]
+          color?: string | null
+          created_at?: string
+          default_status?: string
+          done_statuses?: string[]
+          field_schema?: Json
+          icon?: string | null
+          id?: string
+          is_system?: boolean
+          name?: string
+          owner_id?: string
+          plural_name?: string
+          slug?: string
+          sort_order?: number
+          statuses?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      record_links: {
+        Row: {
+          created_at: string
+          from_id: string
+          id: string
+          note: string | null
+          owner_id: string
+          rel: string
+          to_id: string
+        }
+        Insert: {
+          created_at?: string
+          from_id: string
+          id?: string
+          note?: string | null
+          owner_id?: string
+          rel: string
+          to_id: string
+        }
+        Update: {
+          created_at?: string
+          from_id?: string
+          id?: string
+          note?: string | null
+          owner_id?: string
+          rel?: string
+          to_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "record_links_from_id_fkey"
+            columns: ["from_id"]
+            isOneToOne: false
+            referencedRelation: "public_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "record_links_from_id_fkey"
+            columns: ["from_id"]
+            isOneToOne: false
+            referencedRelation: "public_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "record_links_from_id_fkey"
+            columns: ["from_id"]
+            isOneToOne: false
+            referencedRelation: "records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "record_links_to_id_fkey"
+            columns: ["to_id"]
+            isOneToOne: false
+            referencedRelation: "public_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "record_links_to_id_fkey"
+            columns: ["to_id"]
+            isOneToOne: false
+            referencedRelation: "public_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "record_links_to_id_fkey"
+            columns: ["to_id"]
+            isOneToOne: false
+            referencedRelation: "records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      records: {
+        Row: {
+          body: string | null
+          completed_on: string | null
+          created_at: string
+          data: Json
+          external_id: string | null
+          id: string
+          is_public: boolean
+          kind_id: string
+          minutes_spent: number | null
+          notes: string | null
+          owner_id: string
+          parent_id: string | null
+          platform_id: string | null
+          rank: number | null
+          rank_label: string | null
+          slug: string | null
+          sort_order: number
+          source: string
+          started_on: string | null
+          status: string
+          summary: string | null
+          synced_at: string | null
+          tags: string[]
+          title: string
+          updated_at: string
+          url: string | null
+          writeup_generated_at: string | null
+          writeup_model: string | null
+        }
+        Insert: {
+          body?: string | null
+          completed_on?: string | null
+          created_at?: string
+          data?: Json
+          external_id?: string | null
+          id?: string
+          is_public?: boolean
+          kind_id: string
+          minutes_spent?: number | null
+          notes?: string | null
+          owner_id?: string
+          parent_id?: string | null
+          platform_id?: string | null
+          rank?: number | null
+          rank_label?: string | null
+          slug?: string | null
+          sort_order?: number
+          source?: string
+          started_on?: string | null
+          status?: string
+          summary?: string | null
+          synced_at?: string | null
+          tags?: string[]
+          title: string
+          updated_at?: string
+          url?: string | null
+          writeup_generated_at?: string | null
+          writeup_model?: string | null
+        }
+        Update: {
+          body?: string | null
+          completed_on?: string | null
+          created_at?: string
+          data?: Json
+          external_id?: string | null
+          id?: string
+          is_public?: boolean
+          kind_id?: string
+          minutes_spent?: number | null
+          notes?: string | null
+          owner_id?: string
+          parent_id?: string | null
+          platform_id?: string | null
+          rank?: number | null
+          rank_label?: string | null
+          slug?: string | null
+          sort_order?: number
+          source?: string
+          started_on?: string | null
+          status?: string
+          summary?: string | null
+          synced_at?: string | null
+          tags?: string[]
+          title?: string
+          updated_at?: string
+          url?: string | null
+          writeup_generated_at?: string | null
+          writeup_model?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "entries_platform_id_fkey"
+            columns: ["platform_id"]
+            isOneToOne: false
+            referencedRelation: "platforms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "records_kind_id_fkey"
+            columns: ["kind_id"]
+            isOneToOne: false
+            referencedRelation: "record_kinds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "records_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "public_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "records_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "public_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "records_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sync_runs: {
         Row: {
           entries_created: number
@@ -334,29 +516,35 @@ export type Database = {
           problem_url: string | null
           tags: string[] | null
         }
-        Insert: {
-          category?: string | null
-          challenge_name?: string | null
-          date_completed?: string | null
-          difficulty?: string | null
-          difficulty_rank?: number | null
-          id?: string | null
-          platform_id?: string | null
-          portfolio_writeup?: string | null
-          problem_url?: string | null
-          tags?: string[] | null
-        }
-        Update: {
-          category?: string | null
-          challenge_name?: string | null
-          date_completed?: string | null
-          difficulty?: string | null
-          difficulty_rank?: number | null
-          id?: string | null
-          platform_id?: string | null
-          portfolio_writeup?: string | null
-          problem_url?: string | null
-          tags?: string[] | null
+        Relationships: [
+          {
+            foreignKeyName: "entries_platform_id_fkey"
+            columns: ["platform_id"]
+            isOneToOne: false
+            referencedRelation: "platforms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      public_records: {
+        Row: {
+          body: string | null
+          completed_on: string | null
+          data: Json | null
+          id: string | null
+          kind: string | null
+          kind_id: string | null
+          kind_name: string | null
+          parent_id: string | null
+          platform_id: string | null
+          rank: number | null
+          rank_label: string | null
+          slug: string | null
+          started_on: string | null
+          summary: string | null
+          tags: string[] | null
+          title: string | null
+          url: string | null
         }
         Relationships: [
           {
@@ -364,6 +552,34 @@ export type Database = {
             columns: ["platform_id"]
             isOneToOne: false
             referencedRelation: "platforms"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "records_kind_id_fkey"
+            columns: ["kind_id"]
+            isOneToOne: false
+            referencedRelation: "record_kinds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "records_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "public_entries"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "records_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "public_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "records_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "records"
             referencedColumns: ["id"]
           },
         ]
@@ -377,12 +593,14 @@ export type Database = {
       }
     }
     Functions: {
+      compute_stats_snapshot: { Args: { owner: string }; Returns: Json }
       is_owner: { Args: never; Returns: boolean }
       owner_id: { Args: never; Returns: string }
       stats_activity: {
         Args: {
           bucket: string
           from_date: string
+          kind?: string
           owner: string
           to_date: string
         }
@@ -391,35 +609,42 @@ export type Database = {
           count: number
         }[]
       }
-      stats_by_difficulty: {
-        Args: { owner: string }
+      stats_by_field: {
+        Args: { field: string; kind?: string; owner: string }
         Returns: {
           count: number
-          difficulty_rank: number
+          value: string
         }[]
       }
       stats_by_platform: {
-        Args: { owner: string }
+        Args: { kind?: string; owner: string }
         Returns: {
           count: number
           platform_id: string
           platform_name: string
         }[]
       }
+      stats_by_rank: {
+        Args: { kind?: string; owner: string }
+        Returns: {
+          count: number
+          rank: number
+        }[]
+      }
       stats_by_tag: {
-        Args: { limit?: number; owner: string }
+        Args: { kind?: string; limit?: number; owner: string }
         Returns: {
           count: number
           tag: string
         }[]
       }
       stats_kpis: {
-        Args: { owner: string }
+        Args: { kind?: string; owner: string }
         Returns: {
           current_streak: number
+          done_this_month: number
           longest_streak: number
-          solved_this_month: number
-          total_solved: number
+          total_done: number
         }[]
       }
     }
