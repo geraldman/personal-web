@@ -37,10 +37,38 @@ export interface WriteupResult extends UsageStats {
   writeupText: string
 }
 
+// Assisted capture (decision 4, RECORD-MODEL.md §1.1): paste a terminal/build session, get back
+// review-ready proposals for a "primary" record (e.g. an lfs_checkpoint) and, when the target
+// kind declares a `children:<slug>` capability, one proposal per distinct child (e.g. an
+// lfs_issue per failure). Nothing here is inserted automatically -- every proposal is reviewed,
+// possibly edited, and only then POSTed through the normal records path, where
+// private.validate_record() is the actual authority on field shape.
+export interface ImportProposalInput {
+  kindSlug: string
+  kindName: string
+  fieldSchema: unknown[]
+  childKindSlug: string | null
+  childKindName: string | null
+  childFieldSchema: unknown[] | null
+  sourceText: string
+}
+
+export interface ImportProposal {
+  kind: string
+  fields: Record<string, unknown>
+  sourceExcerpt: string
+}
+
+export interface ImportProposalResult extends UsageStats {
+  proposals: ImportProposal[]
+  warnings: string[]
+}
+
 export interface LLMProvider {
   readonly name: string
   generateAnalysis(input: AnalysisInput): Promise<AnalysisResult>
   generateWriteup(input: WriteupInput): Promise<WriteupResult>
+  generateImportProposals(input: ImportProposalInput): Promise<ImportProposalResult>
 }
 
 export async function getLLMProvider(): Promise<LLMProvider> {

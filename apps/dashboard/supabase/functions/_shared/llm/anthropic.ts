@@ -1,4 +1,12 @@
-import type { AnalysisInput, AnalysisResult, LLMProvider, WriteupInput, WriteupResult } from "./provider.ts"
+import type {
+  AnalysisInput,
+  AnalysisResult,
+  ImportProposalInput,
+  ImportProposalResult,
+  LLMProvider,
+  WriteupInput,
+  WriteupResult,
+} from "./provider.ts"
 
 // Stub only -- not wired up in Phase 6. Kept so LLM_PROVIDER=anthropic fails loudly and clearly
 // rather than silently, and so the provider interface is proven against a second implementation
@@ -11,6 +19,10 @@ export class AnthropicProvider implements LLMProvider {
   }
 
   generateWriteup(_input: WriteupInput): Promise<WriteupResult> {
+    throw new Error("AnthropicProvider is a stub -- not implemented yet")
+  }
+
+  generateImportProposals(_input: ImportProposalInput): Promise<ImportProposalResult> {
     throw new Error("AnthropicProvider is a stub -- not implemented yet")
   }
 }

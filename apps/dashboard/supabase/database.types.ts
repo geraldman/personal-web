@@ -69,34 +69,44 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          kind_id: string | null
           model_used: string | null
           owner_id: string
           parsed: Json | null
-          platform_id: string
+          platform_id: string | null
           raw_input: string
           status: string
         }
         Insert: {
           created_at?: string
           id?: string
+          kind_id?: string | null
           model_used?: string | null
           owner_id?: string
           parsed?: Json | null
-          platform_id: string
+          platform_id?: string | null
           raw_input: string
           status?: string
         }
         Update: {
           created_at?: string
           id?: string
+          kind_id?: string | null
           model_used?: string | null
           owner_id?: string
           parsed?: Json | null
-          platform_id?: string
+          platform_id?: string | null
           raw_input?: string
           status?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "import_batches_kind_id_fkey"
+            columns: ["kind_id"]
+            isOneToOne: false
+            referencedRelation: "record_kinds"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "import_batches_platform_id_fkey"
             columns: ["platform_id"]
