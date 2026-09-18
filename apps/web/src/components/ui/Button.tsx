@@ -7,12 +7,15 @@ type ButtonVariant = "primary" | "outlined" | "ghost";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
-  href: string;
+  href?: string;
   children: React.ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
   className?: string;
   download?: boolean | string;
+  type?: "button" | "submit" | "reset";
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
 function ButtonLabel({ children }: { children: React.ReactNode }) {
@@ -53,15 +56,18 @@ export function Button({
   size = "md",
   className,
   download,
+  type = "button",
+  onClick,
+  disabled,
 }: ButtonProps) {
   const classes = cn(
-    "inline-flex min-h-[44px] items-center justify-center rounded-full font-semibold tracking-wide transition-all duration-200",
+    "inline-flex min-h-[44px] items-center justify-center rounded-full font-semibold tracking-wide transition-all duration-200 disabled:pointer-events-none disabled:opacity-50",
     variantStyles[variant],
     sizeStyles[size],
     className,
   );
 
-  if (download) {
+  if (href && download) {
     return (
       <a href={href} download={download} className={classes}>
         {children}
@@ -69,12 +75,17 @@ export function Button({
     );
   }
 
+  if (href) {
+    return (
+      <Link href={href} className={classes}>
+        <ButtonLabel>{children}</ButtonLabel>
+      </Link>
+    );
+  }
+
   return (
-    <Link
-      href={href}
-      className={classes}
-    >
-      <ButtonLabel>{children}</ButtonLabel>
-    </Link>
+    <button type={type} onClick={onClick} disabled={disabled} className={classes}>
+      {children}
+    </button>
   );
 }
